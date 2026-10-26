@@ -93,3 +93,45 @@ def test_published_guide_has_exercise_headings():
     html = GUIDE_HTML.read_text(encoding="utf-8")
     assert len(re.findall(r'<h3[^>]*>Ejercicios</h3>', html)) == 10
     assert len(re.findall(r'<h3[^>]*>Respuestas</h3>', html)) == 10
+
+
+def test_readme_has_screenshot_links_and_commands():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "docs/assets/screenshot-dashboard.png" in readme
+    assert "https://gerrcass.github.io/analisis-financiero-cafeteria/" in readme
+    assert "docs/assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" in readme
+    assert "make check" in readme
+    assert "no es asesoramiento" in readme.lower()
+    assert "modelo educativo" in readme.lower()
+
+
+def test_screenshot_is_the_real_dashboard_at_1440x900():
+    from PIL import Image
+
+    path = ROOT / "docs" / "assets" / "screenshot-dashboard.png"
+    assert path.exists()
+    with Image.open(path) as image:
+        assert image.size == (1440, 900)
+    assert path.stat().st_size > 10_000
+
+
+def test_ci_runs_the_semantic_gate_and_playwright():
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "make check" in workflow
+    assert "playwright install" in workflow
+    assert "make setup" in workflow
+    assert "git diff --exit-code" not in workflow
+
+
+def test_check_order_verifies_before_building():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "check: verify test" in makefile
+    assert "git diff --exit-code" not in makefile
+    assert "scripts/verify_artifacts.py" in makefile
+    assert "scripts/check_links.py" in makefile
+
+
+def test_relative_links_are_valid():
+    from scripts.check_links import check
+
+    assert check() == []

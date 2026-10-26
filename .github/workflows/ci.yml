@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main, feat/modelo-financiero]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Modelo, libro, sitio y guía
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: make setup
+
+      - name: Instalar Chromium de Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Contrato, motores, libro, sitio y e2e
+        run: make check
+
+      - name: Guardar trazas si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

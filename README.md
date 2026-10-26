@@ -81,9 +81,11 @@ Requisitos: Python 3.10+, Node.js 22+ y `make`.
 make setup      # crea .venv e instala dependencias de test
 make model      # regenera data/expected.json desde data/model.json
 make workbook   # regenera el libro Excel
-make site       # construye el sitio en docs/
+make site       # construye el sitio y publica la guía en docs/
+make screenshot # captura el dashboard real en docs/assets/screenshot-dashboard.png
 make test       # tests Python, Node, libro y navegador
-make check      # construye, testea y verifica que docs/ está actualizado
+make check      # construye, testea y verifica artefactos semánticamente
+make verify     # regenera en temporal y compara golden, libro, sitio y guía
 make serve      # sirve docs/ en http://localhost:8000
 ```
 
@@ -101,7 +103,7 @@ data/model.json
                      └──► scripts/build_site.py ──► docs/ ──► GitHub Pages
 ```
 
-No se edita a mano ni el libro ni el sitio construido. Si un test detecta que `docs/` no coincide con la fuente, se regenera y se commitea el artefacto.
+No se edita a mano ni el libro ni el sitio construido. `make check` no compara bytes de `.xlsx` ni de imágenes —openpyxl cambia el ZIP en cada guardado—: regenera en un directorio temporal y compara **hojas, fórmulas, valores, nombres definidos, gráficos, JSON y archivos de texto**. Si algo semántico cambia, el verificador falla y pide regenerar; CI ejecuta el mismo comando.
 
 ## Calidad
 
@@ -110,8 +112,9 @@ No se edita a mano ni el libro ni el sitio construido. Si un test detecta que `d
 - **Libro**: auditoría de fórmulas, recalculación, diez hojas, cinco gráficos con rangos vivos y cero errores de fórmula.
 - **Sitio**: tests de motor, extremo a extremo, responsive, teclado y descarga.
 - **Contenido**: diez capítulos, 36 ejercicios, cifras clave contrastadas contra los objetivos dorados.
+- **Reproducibilidad**: `make check` regenera el golden, el libro y el sitio en temporal y compara la semántica; CI lo ejecuta en cada push y pull request.
 
-Los tests son la garantía de que "fórmulas vivas" no es una promesa de marketing. La auditoría recorre las celdas calculadas y falla si encuentra un valor pegado.
+Los tests son la garantía de que "fórmulas vivas" no es una promesa de marketing. La auditoría recorre las celdas calculadas y falla si encuentra un valor pegado. El workflow de GitHub Actions instala dependencias, ejecuta Python, Node y Playwright, y falla si un artefacto semántico está desactualizado.
 
 ## Estructura del repositorio
 
@@ -125,6 +128,11 @@ docs/adr/             decisiones de arquitectura
 docs/guia-finanzas.md guía canónica de aprendizaje
 tests/                Python, Node y navegador
 ```
+
+## Publicación
+
+El sitio se publica desde `main` / `docs` en **https://gerrcass.github.io/analisis-financiero-cafeteria/**.
+La captura del README se genera con Playwright (`make screenshot`) y muestra el dashboard real a 1440×900, sin chrome del navegador.
 
 ## Documentación
 
