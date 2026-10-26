@@ -309,27 +309,58 @@
             <p>PVP con IVA en la carta, precio neto en el modelo y coste ajustado por merma. El mix se mantiene.</p>
           </div>
 
-          <div class="split">
-            <article class="card">
+          <div class="product-layout">
+            <article class="card product-table-card">
               <div class="card-head">
                 <div>
                   <h3>La carta, ordenada por ingresos</h3>
                   <p class="sub" id="products-sub">Escenario y año activos.</p>
                 </div>
               </div>
+              <p class="scroll-hint" id="product-scroll-hint">Desliza para ver Mix, Ingresos y % de ingresos →</p>
               <div id="table-products"></div>
-              <p class="reading" id="reading-products"></p>
             </article>
-            <aside class="card">
-              <div class="card-head">
-                <div>
-                  <h3>Margen unitario por producto</h3>
-                  <p class="sub">Precio neto − coste ajustado por merma.</p>
+            <div class="product-bottom">
+              <article class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Margen unitario por producto</h3>
+                    <p class="sub">Precio neto − coste ajustado por merma del año activo.</p>
+                  </div>
                 </div>
-              </div>
-              <div class="chart" id="chart-products"></div>
-              <p class="chart-caption">El espresso tiene el mayor margen porcentual; la bolsa de café, el mayor margen absoluto.</p>
-            </aside>
+                <div class="chart" id="chart-products"></div>
+                <p class="chart-caption" id="product-chart-caption"></p>
+              </article>
+              <aside class="card stack">
+                <div>
+                  <p class="kicker">Lectura</p>
+                  <p class="reading" id="reading-products" style="border-top: 0; padding-top: 0; margin-top: 8px"></p>
+                </div>
+                <div class="mini-grid">
+                  <div class="mini-card">
+                    <span class="label">Mayor margen %</span>
+                    <strong class="value" id="product-best-pct">—</strong>
+                    <span class="meta" id="product-best-pct-meta">—</span>
+                  </div>
+                  <div class="mini-card">
+                    <span class="label">Mayor margen absoluto</span>
+                    <strong class="value" id="product-best-abs">—</strong>
+                    <span class="meta" id="product-best-abs-meta">—</span>
+                  </div>
+                  <div class="mini-card">
+                    <span class="label">Peso de la bolsa</span>
+                    <strong class="value" id="product-bag-share">—</strong>
+                    <span class="meta">de los ingresos del año</span>
+                  </div>
+                  <div class="mini-card">
+                    <span class="label">Mix de la bolsa</span>
+                    <strong class="value" id="product-bag-mix">—</strong>
+                    <span class="meta">unidades, no ingresos</span>
+                  </div>
+                </div>
+                <p class="small muted" style="margin: 0">El PVP y el coste se muestran con el índice de precios y costes del año activo. El mix es estructural.</p>
+              </aside>
+            </div>
           </div>
         </div>
       </section>
