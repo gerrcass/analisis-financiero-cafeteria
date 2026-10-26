@@ -1,0 +1,1046 @@
+{
+  "meta": {
+    "version": "1.0",
+    "generatedAt": "2026-10-25",
+    "tolerance": {
+      "eur": 1.0,
+      "pp": 0.1
+    },
+    "source": "data/model.json"
+  },
+  "contract": {
+    "mixTotal": 100.0,
+    "seasonalityTotal": 12.0,
+    "openingDaysTotal": 312.0,
+    "weightedNetPrice": 2.6691,
+    "weightedCost": 0.9207,
+    "weightedGrossMargin": 65.5,
+    "capexTotal": 132000.0,
+    "annualDepreciation": 16625.0,
+    "staffCostByYear": [
+      110460.0,
+      129349.98,
+      133230.47
+    ],
+    "sources": 160000.0,
+    "uses": 160000.0,
+    "loanPayment": 1402.66,
+    "scenarioOrdering": true
+  },
+  "scenarios": {
+    "pessimistic": {
+      "name": "Pesimista",
+      "annual": {
+        "2026": {
+          "revenue": 338288.5,
+          "cogs": 116695.39,
+          "grossProfit": 221593.11,
+          "grossMargin": 0.655,
+          "personnel": 113773.8,
+          "opex": 77121.77,
+          "ebitda": 30697.54,
+          "ebitdaMargin": 0.0907,
+          "depreciation": 16625.0,
+          "ebit": 14072.54,
+          "interest": 4843.46,
+          "ebt": 9229.08,
+          "tax": 2307.27,
+          "netIncome": 6921.81,
+          "netMargin": 0.0205,
+          "closingCash": 34874.52,
+          "ticketsPerDay": 300.91,
+          "averageTicketNet": 3.6,
+          "averageTicketGross": 3.96,
+          "breakEvenEbitda": 257.91,
+          "breakEvenTotal": 287.98,
+          "safetyMargin": 0.043,
+          "dscr": 1.69,
+          "fcff": 28995.53,
+          "fcfe": 13374.52,
+          "cfo": 30437.27,
+          "maintenanceCapex": 5074.33,
+          "workingCapitalChange": -6890.45,
+          "principal": 11988.42
+        },
+        "2027": {
+          "revenue": 367682.39,
+          "cogs": 130583.87,
+          "grossProfit": 237098.52,
+          "grossMargin": 0.6448,
+          "personnel": 133230.47,
+          "opex": 80356.73,
+          "ebitda": 23511.31,
+          "ebitdaMargin": 0.0639,
+          "depreciation": 16625.0,
+          "ebit": 6886.31,
+          "interest": 3912.77,
+          "ebt": 2973.55,
+          "tax": 743.39,
+          "netIncome": 2230.16,
+          "netMargin": 0.0061,
+          "closingCash": 35319.03,
+          "ticketsPerDay": 322.22,
+          "averageTicketNet": 3.66,
+          "averageTicketGross": 4.02,
+          "breakEvenEbitda": 289.25,
+          "breakEvenTotal": 318.05,
+          "safetyMargin": 0.0129,
+          "dscr": 1.35,
+          "fcff": 16298.19,
+          "fcfe": 444.51,
+          "cfo": 18878.85,
+          "maintenanceCapex": 5515.24,
+          "workingCapitalChange": -23.69,
+          "principal": 12919.11
+        },
+        "2028": {
+          "revenue": 378795.59,
+          "cogs": 138507.05,
+          "grossProfit": 240288.54,
+          "grossMargin": 0.6343,
+          "personnel": 137227.39,
+          "opex": 83348.19,
+          "ebitda": 19712.96,
+          "ebitdaMargin": 0.052,
+          "depreciation": 16625.0,
+          "ebit": 3087.96,
+          "interest": 2909.83,
+          "ebt": 178.14,
+          "tax": 44.53,
+          "netIncome": 133.6,
+          "netMargin": 0.0004,
+          "closingCash": 32498.77,
+          "ticketsPerDay": 327.06,
+          "averageTicketNet": 3.71,
+          "averageTicketGross": 4.08,
+          "breakEvenEbitda": 299.35,
+          "breakEvenTotal": 326.8,
+          "safetyMargin": 0.0008,
+          "dscr": 1.17,
+          "fcff": 13284.17,
+          "fcfe": -2820.25,
+          "cfo": 16783.73,
+          "maintenanceCapex": 5681.93,
+          "workingCapitalChange": -25.13,
+          "principal": 13922.05
+        }
+      },
+      "paybackProjectMonths": null,
+      "paybackEquityMonths": null,
+      "cumulativeFcfe": 10998.77,
+      "cumulativeFcff": 58577.89,
+      "cashOnCash": 12.22,
+      "minimumCash": 20499.1,
+      "loanClosesAtZero": 0.0,
+      "productProfitability": [
+        {
+          "year": 2026,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 27883.45,
+              "revenue": 43092.61,
+              "cogs": 12199.01,
+              "grossProfit": 30893.6,
+              "marginPct": 71.69
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 25348.59,
+              "revenue": 64523.69,
+              "cogs": 19011.45,
+              "grossProfit": 45512.25,
+              "marginPct": 70.54
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 12674.3,
+              "revenue": 29957.43,
+              "cogs": 8713.58,
+              "grossProfit": 21243.85,
+              "marginPct": 70.91
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 16476.59,
+              "revenue": 43438.27,
+              "cogs": 12700.7,
+              "grossProfit": 30737.57,
+              "marginPct": 70.76
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 10139.44,
+              "revenue": 31340.08,
+              "cogs": 10139.44,
+              "grossProfit": 21200.64,
+              "marginPct": 67.65
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 17744.02,
+              "revenue": 37101.12,
+              "cogs": 15815.32,
+              "grossProfit": 21285.81,
+              "marginPct": 57.37
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 11406.87,
+              "revenue": 40442.53,
+              "cogs": 14319.26,
+              "grossProfit": 26123.27,
+              "marginPct": 64.59
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 5069.72,
+              "revenue": 48392.77,
+              "cogs": 23796.64,
+              "grossProfit": 24596.13,
+              "marginPct": 50.83
+            }
+          ]
+        },
+        {
+          "year": 2027,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 29858.37,
+              "revenue": 46836.93,
+              "cogs": 13650.87,
+              "grossProfit": 33186.05,
+              "marginPct": 70.85
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 27143.97,
+              "revenue": 70130.16,
+              "cogs": 21274.09,
+              "grossProfit": 48856.07,
+              "marginPct": 69.66
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 13571.99,
+              "revenue": 32560.43,
+              "cogs": 9750.62,
+              "grossProfit": 22809.81,
+              "marginPct": 70.05
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 17643.58,
+              "revenue": 47212.62,
+              "cogs": 14212.27,
+              "grossProfit": 33000.35,
+              "marginPct": 69.9
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 10857.59,
+              "revenue": 34063.22,
+              "cogs": 11346.18,
+              "grossProfit": 22717.04,
+              "marginPct": 66.69
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 19000.78,
+              "revenue": 40324.84,
+              "cogs": 17697.58,
+              "grossProfit": 22627.26,
+              "marginPct": 56.11
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 12214.79,
+              "revenue": 43956.58,
+              "cogs": 16023.46,
+              "grossProfit": 27933.12,
+              "marginPct": 63.55
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 5428.79,
+              "revenue": 52597.62,
+              "cogs": 26628.79,
+              "grossProfit": 25968.83,
+              "marginPct": 49.37
+            }
+          ]
+        },
+        {
+          "year": 2028,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 30306.25,
+              "revenue": 48252.57,
+              "cogs": 14479.14,
+              "grossProfit": 33773.43,
+              "marginPct": 69.99
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 27551.13,
+              "revenue": 72249.84,
+              "cogs": 22564.89,
+              "grossProfit": 49684.95,
+              "marginPct": 68.77
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 13775.57,
+              "revenue": 33544.57,
+              "cogs": 10342.24,
+              "grossProfit": 23202.33,
+              "marginPct": 69.17
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 17908.24,
+              "revenue": 48639.62,
+              "cogs": 15074.6,
+              "grossProfit": 33565.02,
+              "marginPct": 69.01
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 11020.45,
+              "revenue": 35092.78,
+              "cogs": 12034.61,
+              "grossProfit": 23058.17,
+              "marginPct": 65.71
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 19285.79,
+              "revenue": 41543.66,
+              "cogs": 18771.38,
+              "grossProfit": 22772.28,
+              "marginPct": 54.82
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 12398.01,
+              "revenue": 45285.17,
+              "cogs": 16995.69,
+              "grossProfit": 28289.48,
+              "marginPct": 62.47
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 5510.23,
+              "revenue": 54187.38,
+              "cogs": 28244.49,
+              "grossProfit": 25942.89,
+              "marginPct": 47.88
+            }
+          ]
+        }
+      ]
+    },
+    "base": {
+      "name": "Base",
+      "annual": {
+        "2026": {
+          "revenue": 384418.75,
+          "cogs": 132608.4,
+          "grossProfit": 251810.36,
+          "grossMargin": 0.655,
+          "personnel": 110460.0,
+          "opex": 79692.56,
+          "ebitda": 61657.79,
+          "ebitdaMargin": 0.1604,
+          "depreciation": 16625.0,
+          "ebit": 45032.79,
+          "interest": 4843.46,
+          "ebt": 40189.33,
+          "tax": 10047.33,
+          "netIncome": 30142.0,
+          "netMargin": 0.0784,
+          "closingCash": 57456.0,
+          "ticketsPerDay": 341.94,
+          "averageTicketNet": 3.6,
+          "averageTicketGross": 3.96,
+          "breakEvenEbitda": 254.2,
+          "breakEvenTotal": 284.75,
+          "safetyMargin": 0.1673,
+          "dscr": 3.07,
+          "fcff": 51577.01,
+          "fcfe": 35956.0,
+          "cfo": 53710.7,
+          "maintenanceCapex": 5766.28,
+          "workingCapitalChange": -6943.7,
+          "principal": 11988.42
+        },
+        "2027": {
+          "revenue": 432329.9,
+          "cogs": 150590.72,
+          "grossProfit": 281739.18,
+          "grossMargin": 0.6517,
+          "personnel": 129349.97,
+          "opex": 83121.3,
+          "ebitda": 69267.91,
+          "ebitdaMargin": 0.1602,
+          "depreciation": 16625.0,
+          "ebit": 52642.91,
+          "interest": 3912.77,
+          "ebt": 48730.14,
+          "tax": 12182.53,
+          "netIncome": 36547.6,
+          "netMargin": 0.0845,
+          "closingCash": 91258.44,
+          "ticketsPerDay": 375.18,
+          "averageTicketNet": 3.69,
+          "averageTicketGross": 4.06,
+          "breakEvenEbitda": 278.49,
+          "breakEvenTotal": 307.16,
+          "safetyMargin": 0.1813,
+          "dscr": 3.39,
+          "fcff": 49656.13,
+          "fcfe": 33802.44,
+          "cfo": 53206.5,
+          "maintenanceCapex": 6484.95,
+          "workingCapitalChange": -33.9,
+          "principal": 12919.11
+        },
+        "2028": {
+          "revenue": 460863.67,
+          "cogs": 162095.85,
+          "grossProfit": 298767.82,
+          "grossMargin": 0.6483,
+          "personnel": 133230.47,
+          "opex": 86032.27,
+          "ebitda": 79505.07,
+          "ebitdaMargin": 0.1725,
+          "depreciation": 16625.0,
+          "ebit": 62880.07,
+          "interest": 2909.83,
+          "ebt": 59970.25,
+          "tax": 14992.56,
+          "netIncome": 44977.69,
+          "netMargin": 0.0976,
+          "closingCash": 132062.61,
+          "ticketsPerDay": 390.19,
+          "averageTicketNet": 3.79,
+          "averageTicketGross": 4.16,
+          "breakEvenEbitda": 281.32,
+          "breakEvenTotal": 308.07,
+          "safetyMargin": 0.2105,
+          "dscr": 3.83,
+          "fcff": 56908.59,
+          "fcfe": 40804.17,
+          "cfo": 61639.18,
+          "maintenanceCapex": 6912.96,
+          "workingCapitalChange": -36.49,
+          "principal": 13922.05
+        }
+      },
+      "paybackProjectMonths": 34,
+      "paybackEquityMonths": 30,
+      "cumulativeFcfe": 110562.61,
+      "cumulativeFcff": 158141.73,
+      "cashOnCash": 122.85,
+      "minimumCash": 23245.21,
+      "loanClosesAtZero": 0.0,
+      "productProfitability": [
+        {
+          "year": 2026,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 31685.74,
+              "revenue": 48968.87,
+              "cogs": 13862.51,
+              "grossProfit": 35106.36,
+              "marginPct": 71.69
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 28805.22,
+              "revenue": 73322.38,
+              "cogs": 21603.92,
+              "grossProfit": 51718.46,
+              "marginPct": 70.54
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 14402.61,
+              "revenue": 34042.53,
+              "cogs": 9901.79,
+              "grossProfit": 24140.74,
+              "marginPct": 70.91
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 18723.39,
+              "revenue": 49361.67,
+              "cogs": 14432.62,
+              "grossProfit": 34929.06,
+              "marginPct": 70.76
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 11522.09,
+              "revenue": 35613.73,
+              "cogs": 11522.09,
+              "grossProfit": 24091.64,
+              "marginPct": 67.65
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 20163.65,
+              "revenue": 42160.37,
+              "cogs": 17971.95,
+              "grossProfit": 24188.41,
+              "marginPct": 57.37
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 12962.35,
+              "revenue": 45957.42,
+              "cogs": 16271.88,
+              "grossProfit": 29685.53,
+              "marginPct": 64.59
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 5761.04,
+              "revenue": 54991.78,
+              "cogs": 27041.64,
+              "grossProfit": 27950.15,
+              "marginPct": 50.83
+            }
+          ]
+        },
+        {
+          "year": 2027,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 34765.68,
+              "revenue": 55072.0,
+              "cogs": 15742.33,
+              "grossProfit": 39329.66,
+              "marginPct": 71.41
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 31605.16,
+              "revenue": 82460.74,
+              "cogs": 24533.51,
+              "grossProfit": 57927.24,
+              "marginPct": 70.25
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 15802.58,
+              "revenue": 38285.35,
+              "cogs": 11244.52,
+              "grossProfit": 27040.82,
+              "marginPct": 70.63
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 20543.36,
+              "revenue": 55513.75,
+              "cogs": 16389.75,
+              "grossProfit": 39124.0,
+              "marginPct": 70.48
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 12642.07,
+              "revenue": 40052.36,
+              "cogs": 13084.54,
+              "grossProfit": 26967.82,
+              "marginPct": 67.33
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 22123.61,
+              "revenue": 47414.93,
+              "cogs": 20409.03,
+              "grossProfit": 27005.89,
+              "marginPct": 56.96
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 14222.32,
+              "revenue": 51685.22,
+              "cogs": 18478.43,
+              "grossProfit": 33206.79,
+              "marginPct": 64.25
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 6321.03,
+              "revenue": 61845.56,
+              "cogs": 30708.61,
+              "grossProfit": 31136.95,
+              "marginPct": 50.35
+            }
+          ]
+        },
+        {
+          "year": 2028,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 36156.31,
+              "revenue": 58706.75,
+              "cogs": 16945.05,
+              "grossProfit": 41761.7,
+              "marginPct": 71.14
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 32869.37,
+              "revenue": 87903.15,
+              "cogs": 26407.87,
+              "grossProfit": 61495.29,
+              "marginPct": 69.96
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 16434.68,
+              "revenue": 40812.18,
+              "cogs": 12103.61,
+              "grossProfit": 28708.57,
+              "marginPct": 70.34
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 21365.09,
+              "revenue": 59177.66,
+              "cogs": 17641.92,
+              "grossProfit": 41535.74,
+              "marginPct": 70.19
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 13147.75,
+              "revenue": 42695.82,
+              "cogs": 14084.2,
+              "grossProfit": 28611.62,
+              "marginPct": 67.01
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 23008.56,
+              "revenue": 50544.31,
+              "cogs": 21968.28,
+              "grossProfit": 28576.03,
+              "marginPct": 56.54
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 14791.22,
+              "revenue": 55096.44,
+              "cogs": 19890.18,
+              "grossProfit": 35206.26,
+              "marginPct": 63.9
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 6573.87,
+              "revenue": 65927.36,
+              "cogs": 33054.75,
+              "grossProfit": 32872.62,
+              "marginPct": 49.86
+            }
+          ]
+        }
+      ]
+    },
+    "optimistic": {
+      "name": "Optimista",
+      "annual": {
+        "2026": {
+          "revenue": 415172.25,
+          "cogs": 143217.07,
+          "grossProfit": 271955.19,
+          "grossMargin": 0.655,
+          "personnel": 108250.8,
+          "opex": 83194.89,
+          "ebitda": 80509.5,
+          "ebitdaMargin": 0.1939,
+          "depreciation": 16625.0,
+          "ebit": 63884.5,
+          "interest": 4843.46,
+          "ebt": 59041.03,
+          "tax": 14760.26,
+          "netIncome": 44280.78,
+          "netMargin": 0.1067,
+          "closingCash": 71168.97,
+          "ticketsPerDay": 369.3,
+          "averageTicketNet": 3.6,
+          "averageTicketGross": 3.96,
+          "breakEvenEbitda": 252.86,
+          "breakEvenTotal": 283.91,
+          "safetyMargin": 0.2312,
+          "dscr": 3.91,
+          "fcff": 65289.98,
+          "fcfe": 49668.97,
+          "cfo": 67884.97,
+          "maintenanceCapex": 6227.58,
+          "workingCapitalChange": -6979.19,
+          "principal": 11988.42
+        },
+        "2027": {
+          "revenue": 479145.47,
+          "cogs": 164644.51,
+          "grossProfit": 314500.96,
+          "grossMargin": 0.6564,
+          "personnel": 126762.98,
+          "opex": 87380.18,
+          "ebitda": 100357.8,
+          "ebitdaMargin": 0.2095,
+          "depreciation": 16625.0,
+          "ebit": 83732.8,
+          "interest": 3912.77,
+          "ebt": 79820.03,
+          "tax": 19955.01,
+          "netIncome": 59865.02,
+          "netMargin": 0.1249,
+          "closingCash": 127595.68,
+          "ticketsPerDay": 412.99,
+          "averageTicketNet": 3.72,
+          "averageTicketGross": 4.09,
+          "breakEvenEbitda": 272.65,
+          "breakEvenTotal": 301.37,
+          "safetyMargin": 0.2703,
+          "dscr": 4.78,
+          "fcff": 72280.39,
+          "fcfe": 56426.71,
+          "cfo": 76533.0,
+          "maintenanceCapex": 7187.18,
+          "workingCapitalChange": -42.97,
+          "principal": 12919.11
+        },
+        "2028": {
+          "revenue": 524146.81,
+          "cogs": 179409.83,
+          "grossProfit": 344736.98,
+          "grossMargin": 0.6577,
+          "personnel": 130565.86,
+          "opex": 90847.82,
+          "ebitda": 123323.29,
+          "ebitdaMargin": 0.2353,
+          "depreciation": 16625.0,
+          "ebit": 106698.29,
+          "interest": 2909.83,
+          "ebt": 103788.47,
+          "tax": 25947.12,
+          "netIncome": 77841.35,
+          "netMargin": 0.1485,
+          "closingCash": 200324.6,
+          "ticketsPerDay": 437.77,
+          "averageTicketNet": 3.84,
+          "averageTicketGross": 4.22,
+          "breakEvenEbitda": 271.02,
+          "breakEvenTotal": 297.44,
+          "safetyMargin": 0.3206,
+          "dscr": 5.79,
+          "fcff": 88833.34,
+          "fcfe": 72728.92,
+          "cfo": 94513.18,
+          "maintenanceCapex": 7862.2,
+          "workingCapitalChange": -46.83,
+          "principal": 13922.05
+        }
+      },
+      "paybackProjectMonths": 25,
+      "paybackEquityMonths": 22,
+      "cumulativeFcfe": 178824.6,
+      "cumulativeFcff": 226403.72,
+      "cashOnCash": 198.69,
+      "minimumCash": 24932.12,
+      "loanClosesAtZero": 0.0,
+      "productProfitability": [
+        {
+          "year": 2026,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 34220.6,
+              "revenue": 52886.38,
+              "cogs": 14971.51,
+              "grossProfit": 37914.87,
+              "marginPct": 71.69
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 31109.64,
+              "revenue": 79188.17,
+              "cogs": 23332.23,
+              "grossProfit": 55855.94,
+              "marginPct": 70.54
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 15554.82,
+              "revenue": 36765.94,
+              "cogs": 10693.94,
+              "grossProfit": 26072.0,
+              "marginPct": 70.91
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 20221.26,
+              "revenue": 53310.61,
+              "cogs": 15587.22,
+              "grossProfit": 37723.38,
+              "marginPct": 70.76
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 12443.86,
+              "revenue": 38462.82,
+              "cogs": 12443.86,
+              "grossProfit": 26018.97,
+              "marginPct": 67.65
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 21776.75,
+              "revenue": 45533.2,
+              "cogs": 19409.71,
+              "grossProfit": 26123.49,
+              "marginPct": 57.37
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 13999.34,
+              "revenue": 49634.01,
+              "cogs": 17573.64,
+              "grossProfit": 32060.38,
+              "marginPct": 64.59
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 6221.93,
+              "revenue": 59391.13,
+              "cogs": 29204.97,
+              "grossProfit": 30186.16,
+              "marginPct": 50.83
+            }
+          ]
+        },
+        {
+          "year": 2027,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 38268.99,
+              "revenue": 61035.56,
+              "cogs": 17211.48,
+              "grossProfit": 43824.08,
+              "marginPct": 71.8
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 34789.99,
+              "revenue": 91390.14,
+              "cogs": 26823.08,
+              "grossProfit": 64567.06,
+              "marginPct": 70.65
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 17395.0,
+              "revenue": 42431.14,
+              "cogs": 12293.91,
+              "grossProfit": 30137.23,
+              "marginPct": 71.03
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 22613.49,
+              "revenue": 61525.15,
+              "cogs": 17919.31,
+              "grossProfit": 43605.84,
+              "marginPct": 70.87
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 13916.0,
+              "revenue": 44389.5,
+              "cogs": 14305.64,
+              "grossProfit": 30083.85,
+              "marginPct": 67.77
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 24352.99,
+              "revenue": 52549.33,
+              "cogs": 22313.7,
+              "grossProfit": 30235.64,
+              "marginPct": 57.54
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 15655.5,
+              "revenue": 57282.04,
+              "cogs": 20202.92,
+              "grossProfit": 37079.12,
+              "marginPct": 64.73
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 6958.0,
+              "revenue": 68542.61,
+              "cogs": 33574.47,
+              "grossProfit": 34968.14,
+              "marginPct": 51.02
+            }
+          ]
+        },
+        {
+          "year": 2028,
+          "products": [
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "units": 40565.13,
+              "revenue": 66768.02,
+              "cogs": 18755.0,
+              "grossProfit": 48013.02,
+              "marginPct": 71.91
+            },
+            {
+              "id": "flat-white",
+              "name": "Flat white",
+              "units": 36877.39,
+              "revenue": 99973.51,
+              "cogs": 29228.58,
+              "grossProfit": 70744.93,
+              "marginPct": 70.76
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "units": 18438.7,
+              "revenue": 46416.27,
+              "cogs": 13396.43,
+              "grossProfit": 33019.84,
+              "marginPct": 71.14
+            },
+            {
+              "id": "latte",
+              "name": "Latte",
+              "units": 23970.3,
+              "revenue": 67303.59,
+              "cogs": 19526.31,
+              "grossProfit": 47777.28,
+              "marginPct": 70.99
+            },
+            {
+              "id": "cold-brew",
+              "name": "Cold brew",
+              "units": 14750.96,
+              "revenue": 48558.56,
+              "cogs": 15588.57,
+              "grossProfit": 32969.99,
+              "marginPct": 67.9
+            },
+            {
+              "id": "croissant",
+              "name": "Croissant",
+              "units": 25814.17,
+              "revenue": 57484.77,
+              "cogs": 24314.79,
+              "grossProfit": 33169.98,
+              "marginPct": 57.7
+            },
+            {
+              "id": "tostada",
+              "name": "Tostada",
+              "units": 16594.83,
+              "revenue": 62661.97,
+              "cogs": 22014.72,
+              "grossProfit": 40647.25,
+              "marginPct": 64.87
+            },
+            {
+              "id": "bolsa-cafe",
+              "name": "Bolsa café 250 g",
+              "units": 7375.48,
+              "revenue": 74980.13,
+              "cogs": 36585.43,
+              "grossProfit": 38394.7,
+              "marginPct": 51.21
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
