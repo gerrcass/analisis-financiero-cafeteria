@@ -202,3 +202,99 @@ test.describe('Cafetería Aurora — dashboard', () => {
     await expect(page.locator('#model-annual caption')).toContainText('Cuenta de resultados');
   });
 });
+
+test.describe('Cafetería Aurora — laboratorio y guía', () => {
+  async function setRange(page, id: string, value: string) {
+    await page.locator(`#${id}`).evaluate((element, next) => {
+      const input = element as HTMLInputElement;
+      input.value = next;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }, value);
+    await page.waitForTimeout(80);
+  }
+
+  test('el laboratorio recalcula, muestra delta y comparte por URL', async ({ page }) => {
+    await page.goto('/?escenario=base&anio=2028#laboratorio', { waitUntil: 'networkidle' });
+    await expect(page.locator('#lab-controls input[type="range"]')).toHaveCount(10);
+    await expect(page.locator('#lab-status')).toContainText('Escenario Base');
+    await expect(page.locator('#lab-revenue')).toContainText('460.864');
+
+    await setRange(page, 'lab-demandFactor', '1.1');
+    await expect(page.locator('#lab-status')).toContainText('Personalizado');
+    await expect(page.locator('#lab-revenue')).toContainText('506.950');
+    await expect(page.locator('#lab-delta-revenue')).toContainText('+10,0');
+    await expect(page).toHaveURL(/#lab=d:1\.1/);
+
+    await page.locator('#lab-copy').click();
+    await expect(page.locator('#toast')).toContainText('Enlace copiado');
+
+    await page.locator('#lab-reset').click();
+    await expect(page.locator('#lab-status')).toContainText('Escenario Base');
+    await expect(page.locator('#lab-delta-revenue')).toHaveText('—');
+    await expect(page).not.toHaveURL(/#lab=/);
+  });
+
+  test('un enlace con overrides restaura el laboratorio', async ({ page }) => {
+    await page.goto('/?escenario=base&anio=2028#lab=d:1.1', { waitUntil: 'networkidle' });
+    await expect(page.locator('#lab-status')).toContainText('Personalizado');
+    await expect(page.locator('#lab-revenue')).toContainText('506.950');
+    await expect(page.locator('#lab-delta-revenue')).toContainText('+10,0');
+  });
+
+  test('el laboratorio avisa cuando la caja mínima o el payback se rompen', async ({ page }) => {
+    await page.goto('/?escenario=base&anio=2028#laboratorio', { waitUntil: 'networkidle' });
+    await setRange(page, 'lab-demandFactor', '0.7');
+    await expect(page.locator('#lab-callout')).toBeVisible();
+    await expect(page.locator('#lab-callout')).toContainText('Ojo con la liquidez');
+    await expect(page.locator('#lab-callout')).toContainText('payback supera');
+  });
+
+  test('cambiar de escenario reinicia el laboratorio y avisa', async ({ page }) => {
+    await page.goto('/?escenario=base&anio=2028#laboratorio', { waitUntil: 'networkidle' });
+    await setRange(page, 'lab-demandFactor', '1.05');
+    await expect(page.locator('#lab-status')).toContainText('Personalizado');
+    await page.getByRole('button', { name: 'Pesimista' }).click();
+    await expect(page.locator('#lab-status')).toContainText('Escenario Pesimista');
+    await expect(page.locator('#lab-revenue')).toContainText('378.796');
+    await expect(page.locator('#toast')).toContainText('laboratorio se ha reiniciado');
+    await expect(page).not.toHaveURL(/#lab=/);
+  });
+
+  test('la guía se genera con 10 capítulos, TOC y calculadoras', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.goto('/aprende.html', { waitUntil: 'networkidle' });
+    await expect(page).toHaveTitle(/Aprende finanzas/);
+    for (let number = 1; number <= 10; number += 1) {
+      await expect(page.locator(`#capitulo-${number}`)).toHaveCount(1);
+    }
+    await expect(page.locator('.guide-toc a')).toHaveCount(18);
+    await expect(page.locator('.guide-content h3', { hasText: 'Ejercicios' })).toHaveCount(10);
+    await expect(page.locator('.guide-content h3', { hasText: 'Respuestas' })).toHaveCount(10);
+    await expect(page.locator('.calc-card')).toHaveCount(3);
+    await expect(page.locator('#calc-ticket-output')).toContainText('384.420');
+    await page.locator('#calc-ticket-tickets').fill('400');
+    await expect(page.locator('#calc-ticket-output')).toContainText('449.690');
+    await expect(page.locator('#calc-cash-output')).toContainText('35.956');
+    expect(errors).toEqual([]);
+  });
+
+  test('la guía es responsive y navega desde el dashboard', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('.nav-toggle').click();
+    await page.getByRole('link', { name: 'Aprende', exact: true }).first().click();
+    await expect(page).toHaveURL(/aprende\.html/);
+    const metrics = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth
+    }));
+    expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
+    await expect(page.locator('#capitulo-5')).toHaveCount(1);
+    await page.locator('.guide-toc a[href="#capitulo-5"]').click();
+    await expect(page).toHaveURL(/#capitulo-5/);
+  });
+});
