@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#0d9488"/>
-  <text x="32" y="32" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="26" font-weight="600" fill="#ffffff">AF</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="aurora-favicon-title">
+  <title id="aurora-favicon-title">Aurora</title>
+  <rect width="32" height="32" rx="7" fill="#2B1D16"/>
+  <g fill="none" stroke="#F7F1E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 12a5.5 5.5 0 0 1 5.5 5.5h-11A5.5 5.5 0 0 1 16 12Z"/>
+    <path d="M16 5.5v2.5M8.8 8.8l1.8 1.8M23.2 8.8l-1.8 1.8"/>
+  </g>
 </svg>
