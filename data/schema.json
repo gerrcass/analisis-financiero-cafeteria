@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gerrcass.github.io/analisis-financiero-cafeteria/schema/model.schema.json",
+  "title": "Cafetería Aurora — contrato de supuestos",
+  "description": "Entradas del modelo financiero. Los valores calculados no viven en este contrato.",
+  "type": "object",
+  "required": [
+    "meta",
+    "calendar",
+    "products",
+    "staff",
+    "fixedCosts",
+    "capex",
+    "financing",
+    "tax",
+    "workingCapital",
+    "scenarioOrder",
+    "scenarios"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["name", "version", "generatedAt", "currency", "disclaimer"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "tagline": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "generatedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "currency": { "const": "EUR" },
+        "author": { "type": "string" },
+        "disclaimer": { "type": "string", "minLength": 20 },
+        "sourceBrief": { "type": "string" }
+      }
+    },
+    "calendar": {
+      "type": "object",
+      "required": [
+        "start",
+        "months",
+        "years",
+        "openingDays",
+        "seasonality",
+        "ramp",
+        "baseTicketsPerDay",
+        "itemsPerTicket",
+        "vat"
+      ],
+      "properties": {
+        "start": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "months": { "const": 36 },
+        "years": {
+          "type": "array",
+          "prefixItems": [{ "const": 2026 }, { "const": 2027 }, { "const": 2028 }],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "openingDays": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 12,
+          "items": { "type": "number", "minimum": 0, "maximum": 31 }
+        },
+        "seasonality": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 12,
+          "items": { "type": "number", "minimum": 0.4, "maximum": 2 }
+        },
+        "ramp": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 12,
+          "items": { "type": "number", "minimum": 0.4, "maximum": 1.2 }
+        },
+        "baseTicketsPerDay": { "type": "number", "minimum": 1, "maximum": 5000 },
+        "itemsPerTicket": { "type": "number", "minimum": 1, "maximum": 5 },
+        "vat": { "type": "number", "minimum": 0, "maximum": 0.5 }
+      }
+    },
+    "products": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "category", "pvp", "vat", "unitCost", "mix", "waste"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "pvp": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+          "vat": { "type": "number", "minimum": 0, "maximum": 0.5 },
+          "unitCost": { "type": "number", "minimum": 0, "maximum": 100 },
+          "mix": { "type": "number", "minimum": 0, "maximum": 1 },
+          "waste": { "type": "number", "minimum": 0, "maximum": 0.9 }
+        }
+      }
+    },
+    "staff": {
+      "type": "object",
+      "required": ["roles", "employerSocialSecurity", "salaryGrowth"],
+      "properties": {
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "required": ["name", "grossSalary", "fte"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "grossSalary": { "type": "number", "minimum": 0 },
+              "fte": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": { "type": "number", "minimum": 0, "maximum": 50 }
+              }
+            }
+          }
+        },
+        "employerSocialSecurity": { "type": "number", "minimum": 0, "maximum": 0.6 },
+        "salaryGrowth": { "type": "number", "minimum": 0, "maximum": 0.2 }
+      }
+    },
+    "fixedCosts": {
+      "type": "object",
+      "required": [
+        "rent",
+        "utilities",
+        "fixedServices",
+        "fixedMarketing",
+        "other",
+        "rentGrowth",
+        "fixedMarketingGrowth"
+      ],
+      "properties": {
+        "rent": { "type": "number", "minimum": 0 },
+        "utilities": { "type": "number", "minimum": 0 },
+        "fixedServices": { "type": "number", "minimum": 0 },
+        "fixedMarketing": { "type": "number", "minimum": 0 },
+        "other": { "type": "number", "minimum": 0 },
+        "rentGrowth": { "type": "number", "minimum": 0, "maximum": 0.2 },
+        "fixedMarketingGrowth": { "type": "number", "minimum": 0, "maximum": 0.2 }
+      }
+    },
+    "capex": {
+      "type": "object",
+      "required": ["items", "maintenancePct"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "required": ["name", "amount", "lifeYears"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "amount": { "type": "number", "minimum": 0 },
+              "lifeYears": { "type": "number", "exclusiveMinimum": 0, "maximum": 50 }
+            }
+          }
+        },
+        "maintenancePct": { "type": "number", "minimum": 0, "maximum": 0.1 }
+      }
+    },
+    "financing": {
+      "type": "object",
+      "required": [
+        "equity",
+        "loanAmount",
+        "loanRate",
+        "loanMonths",
+        "openingCash",
+        "initialStock",
+        "minimumCash"
+      ],
+      "properties": {
+        "equity": { "type": "number", "minimum": 0 },
+        "loanAmount": { "type": "number", "minimum": 0 },
+        "loanRate": { "type": "number", "minimum": 0, "maximum": 0.5 },
+        "loanMonths": { "type": "integer", "minimum": 1, "maximum": 360 },
+        "openingCash": { "type": "number", "minimum": 0 },
+        "initialStock": { "type": "number", "minimum": 0 },
+        "minimumCash": { "type": "number", "minimum": 0 }
+      }
+    },
+    "tax": {
+      "type": "object",
+      "required": ["corporateRate"],
+      "properties": {
+        "corporateRate": { "type": "number", "minimum": 0, "maximum": 0.5 }
+      }
+    },
+    "workingCapital": {
+      "type": "object",
+      "required": ["inventoryDays", "payableDays", "receivableDays"],
+      "properties": {
+        "inventoryDays": { "type": "number", "minimum": 0, "maximum": 365 },
+        "payableDays": { "type": "number", "minimum": 0, "maximum": 365 },
+        "receivableDays": { "type": "number", "minimum": 0, "maximum": 365 }
+      }
+    },
+    "scenarioOrder": {
+      "type": "array",
+      "prefixItems": [{ "const": "pessimistic" }, { "const": "base" }, { "const": "optimistic" }],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "scenarios": {
+      "type": "object",
+      "required": ["pessimistic", "base", "optimistic"],
+      "additionalProperties": false,
+      "properties": {
+        "pessimistic": { "$ref": "#/$defs/scenario" },
+        "base": { "$ref": "#/$defs/scenario" },
+        "optimistic": { "$ref": "#/$defs/scenario" }
+      }
+    }
+  },
+  "$defs": {
+    "scenario": {
+      "type": "object",
+      "required": [
+        "name",
+        "summary",
+        "demandFactor",
+        "demandGrowth",
+        "priceGrowth",
+        "productCostInflation",
+        "personnelFactor",
+        "rentFactor",
+        "servicesInflation",
+        "marketingPct",
+        "otherOpexFactor",
+        "otherOpexGrowth"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "shortName": { "type": "string" },
+        "summary": { "type": "string", "minLength": 20 },
+        "demandFactor": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "demandGrowth": { "type": "number", "minimum": -0.2, "maximum": 0.3 },
+        "priceGrowth": { "type": "number", "minimum": -0.2, "maximum": 0.2 },
+        "productCostInflation": { "type": "number", "minimum": -0.2, "maximum": 0.2 },
+        "personnelFactor": { "type": "number", "minimum": 0.8, "maximum": 1.2 },
+        "rentFactor": { "type": "number", "minimum": 0.8, "maximum": 1.2 },
+        "servicesInflation": { "type": "number", "minimum": -0.2, "maximum": 0.2 },
+        "marketingPct": { "type": "number", "minimum": 0, "maximum": 0.1 },
+        "otherOpexFactor": { "type": "number", "minimum": 0.8, "maximum": 1.2 },
+        "otherOpexGrowth": { "type": "number", "minimum": -0.2, "maximum": 0.2 }
+      }
+    }
+  }
+}

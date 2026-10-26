@@ -1,0 +1,19 @@
+{
+  "name": "cafeteria-aurora-modelo-financiero",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Modelo financiero, dashboard y guía de Cafetería Aurora",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test:node": "node --test tests/js/*.test.js",
+    "test:e2e": "playwright test",
+    "test": "npm run test:node && npm run test:e2e",
+    "screenshot": "node scripts/screenshot.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}
