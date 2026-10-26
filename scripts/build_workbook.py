@@ -18,6 +18,7 @@ from typing import Any, Callable
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, DoughnutChart, LineChart, Reference
 from openpyxl.chart.axis import ChartLines
+from openpyxl.chart.data_source import AxDataSource, StrRef
 from openpyxl.chart.label import DataLabelList
 from openpyxl.formatting.rule import CellIsRule
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -1352,6 +1353,13 @@ class WorkbookBuilder:
         page_setup(ws, landscape=True)
         ws.print_area = "A1:T174"
 
+    @staticmethod
+    def _set_text_categories(chart, reference: str) -> None:
+        """Fuerza categorías de texto (strRef) para nombres, no números 1,2,3."""
+        source = AxDataSource(strRef=StrRef(f=reference))
+        for series in chart.series:
+            series.cat = source
+
     def _style_summary_chart(self, chart, title: str, y_title: str | None = None) -> None:
         chart.title = title
         chart.height = 8
@@ -1405,7 +1413,7 @@ class WorkbookBuilder:
         bar3.type = "col"
         bar3.grouping = "clustered"
         bar3.add_data(Reference(ws, min_col=3, max_col=5, min_row=150, max_row=153), titles_from_data=True)
-        bar3.set_categories(Reference(ws, min_col=1, min_row=151, max_row=153))
+        self._set_text_categories(bar3, "'Resumen'!$A$151:$A$153")
         for index, color in enumerate((TERRACOTTA, SAGE_STRONG, GOLD_STRONG)):
             bar3.series[index].graphicalProperties.solidFill = color
         self._style_summary_chart(bar3, "Comparativa de escenarios 2028", "€")
@@ -1416,7 +1424,7 @@ class WorkbookBuilder:
         bar4.type = "bar"
         bar4.grouping = "clustered"
         bar4.add_data(Reference(ws, min_col=3, min_row=157, max_row=165), titles_from_data=True)
-        bar4.set_categories(Reference(ws, min_col=2, min_row=158, max_row=165))
+        self._set_text_categories(bar4, "'Resumen'!$B$158:$B$165")
         bar4.series[0].graphicalProperties.solidFill = TERRACOTTA
         self._style_summary_chart(bar4, "Ingresos por producto — Base 2028", "€")
         bar4.legend = None
@@ -1425,7 +1433,7 @@ class WorkbookBuilder:
         # 5. Estructura de costes Base 2026
         doughnut = DoughnutChart()
         doughnut.add_data(Reference(ws, min_col=3, min_row=168, max_row=173), titles_from_data=True)
-        doughnut.set_categories(Reference(ws, min_col=2, min_row=169, max_row=173))
+        self._set_text_categories(doughnut, "'Resumen'!$B$169:$B$173")
         doughnut.dataLabels = DataLabelList()
         doughnut.dataLabels.showPercent = True
         doughnut.height = 8

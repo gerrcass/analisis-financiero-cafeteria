@@ -321,6 +321,34 @@ def test_five_live_charts_reference_cell_ranges(wb):
         assert ws[cell].data_type == "f"
 
 
+def test_chart_categories_use_str_ref_for_text_and_num_ref_for_dates(wb):
+    ws = wb["Resumen"]
+    charts = ws._charts
+    assert len(charts) == 5
+
+    # Gráficos 1 y 2: categorías de fecha, numRef es correcto.
+    for chart in charts[:2]:
+        for series in chart.series:
+            assert series.cat is not None
+            assert series.cat.numRef is not None, f"fecha sin numRef: {chart.title}"
+            assert series.cat.strRef is None
+
+    # Gráficos 3, 4 y 5: categorías de texto, strRef es obligatorio.
+    expected = {
+        2: "'Resumen'!$A$151:$A$153",
+        3: "'Resumen'!$B$158:$B$165",
+        4: "'Resumen'!$B$169:$B$173",
+    }
+    for index, reference in expected.items():
+        chart = charts[index]
+        assert chart.series, f"gráfico {index + 1} sin series"
+        for series in chart.series:
+            assert series.cat is not None
+            assert series.cat.strRef is not None, f"texto sin strRef: {chart.title}"
+            assert series.cat.strRef.f == reference
+            assert series.cat.numRef is None
+
+
 def test_aprende_sheet_has_chapters_examples_and_questions(wb):
     ws = wb["Aprende"]
     text = " ".join(str(cell.value) for row in ws.iter_rows() for cell in row if cell.value)
