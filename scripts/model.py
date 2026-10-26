@@ -71,14 +71,24 @@ OVERVIEW_FIELDS = (
 
 
 def _r2(value: float) -> float:
-    """Redondea a dos decimales evitando el -0.0."""
-    out = round(float(value), 2)
-    return 0.0 if out == 0 else out
+    """Redondea a dos decimales de forma estable entre versiones de Python.
+
+    ``round`` depende de la representación binaria y puede devolver 129.349,97
+    o 129.349,98 en versiones distintas. Los importes se redondean con Decimal
+    y ROUND_HALF_UP, la convención del brief.
+    """
+    from decimal import Decimal, ROUND_HALF_UP
+
+    out = Decimal(str(float(value))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    result = float(out)
+    return 0.0 if result == 0 else result
 
 
 def _r4(value: float) -> float:
-    """Cuatro decimales para ratios que se comparan en puntos porcentuales."""
-    return round(float(value), 4)
+    """Cuatro decimales estables para ratios comparados en puntos porcentuales."""
+    from decimal import Decimal, ROUND_HALF_UP
+
+    return float(Decimal(str(float(value))).quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP))
 
 
 def _money(value: float) -> float:
@@ -247,17 +257,23 @@ def product_economics(data: Mapping[str, Any]) -> list[dict[str, float]]:
 
 
 def staff_costs(data: Mapping[str, Any]) -> list[float]:
-    """Coste empresa por año: Σ(FTE × salario) × (1+SS) × (1+crecimiento)^(y-1)."""
+    """Coste empresa por año: Σ(FTE × salario) × (1+SS) × (1+crecimiento)^(y-1).
+
+    La aritmética se hace con Decimal para que el redondeo a céntimos no
+    dependa de la versión de Python (el caso 129.349,975 es el canario).
+    """
+    from decimal import Decimal
+
     staff = data["staff"]
-    security = float(staff["employerSocialSecurity"])
-    growth = float(staff["salaryGrowth"])
+    security = Decimal(str(staff["employerSocialSecurity"]))
+    growth = Decimal(str(staff["salaryGrowth"]))
     costs: list[float] = []
     for year_index in range(3):
         base = sum(
-            float(role["grossSalary"]) * float(role["fte"][year_index])
+            Decimal(str(role["grossSalary"])) * Decimal(str(role["fte"][year_index]))
             for role in staff["roles"]
         )
-        costs.append(base * (1 + security) * (1 + growth) ** year_index)
+        costs.append(float(base * (1 + security) * (1 + growth) ** year_index))
     return costs
 
 
@@ -543,7 +559,12 @@ def build_model(
         revenue = sum(m["revenue"] for m in slice_)
         cogs = sum(m["cogs"] for m in slice_)
         gross_profit = revenue - cogs
-        personnel = sum(m["personnel"] for m in slice_)
+        from decimal import Decimal
+
+        personnel = float(
+            Decimal(str(staff_by_year[year_index]))
+            * Decimal(str(scenario["personnelFactor"]))
+        )
         opex = sum(m["totalOpex"] - m["personnel"] for m in slice_)
         ebitda = gross_profit - personnel - opex
         depreciation = sum(m["depreciation"] for m in slice_)
