@@ -1,0 +1,244 @@
+{
+  "meta": {
+    "name": "Cafetería Aurora",
+    "tagline": "Modelo financiero 2026–2028",
+    "version": "1.0",
+    "generatedAt": "2026-10-25",
+    "currency": "EUR",
+    "author": "Cafetería Aurora",
+    "disclaimer": "Modelo educativo. No es asesoramiento financiero, fiscal ni legal.",
+    "sourceBrief": "docs/project-brief.md"
+  },
+  "calendar": {
+    "start": "2026-01-01",
+    "months": 36,
+    "years": [2026, 2027, 2028],
+    "openingDays": [27, 24, 27, 26, 27, 26, 27, 24, 26, 27, 25, 26],
+    "seasonality": [0.92, 0.93, 1.02, 1.04, 1.08, 1.06, 0.88, 0.72, 1.06, 1.09, 1.04, 1.16],
+    "ramp": [0.75, 0.82, 0.88, 0.93, 0.97, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+    "baseTicketsPerDay": 360,
+    "itemsPerTicket": 1.35,
+    "vat": 0.1
+  },
+  "products": [
+    {
+      "id": "espresso",
+      "name": "Espresso",
+      "category": "Café",
+      "pvp": 1.7,
+      "vat": 0.1,
+      "unitCost": 0.42,
+      "mix": 0.22,
+      "waste": 0.04
+    },
+    {
+      "id": "flat-white",
+      "name": "Flat white",
+      "category": "Café con leche",
+      "pvp": 2.8,
+      "vat": 0.1,
+      "unitCost": 0.72,
+      "mix": 0.2,
+      "waste": 0.04
+    },
+    {
+      "id": "cappuccino",
+      "name": "Cappuccino",
+      "category": "Café con leche",
+      "pvp": 2.6,
+      "vat": 0.1,
+      "unitCost": 0.66,
+      "mix": 0.1,
+      "waste": 0.04
+    },
+    {
+      "id": "latte",
+      "name": "Latte",
+      "category": "Café con leche",
+      "pvp": 2.9,
+      "vat": 0.1,
+      "unitCost": 0.74,
+      "mix": 0.13,
+      "waste": 0.04
+    },
+    {
+      "id": "cold-brew",
+      "name": "Cold brew",
+      "category": "Café frío",
+      "pvp": 3.4,
+      "vat": 0.1,
+      "unitCost": 0.95,
+      "mix": 0.08,
+      "waste": 0.05
+    },
+    {
+      "id": "croissant",
+      "name": "Croissant",
+      "category": "Panadería",
+      "pvp": 2.3,
+      "vat": 0.1,
+      "unitCost": 0.82,
+      "mix": 0.14,
+      "waste": 0.08
+    },
+    {
+      "id": "tostada",
+      "name": "Tostada",
+      "category": "Salado",
+      "pvp": 3.9,
+      "vat": 0.1,
+      "unitCost": 1.18,
+      "mix": 0.09,
+      "waste": 0.06
+    },
+    {
+      "id": "bolsa-cafe",
+      "name": "Bolsa café 250 g",
+      "category": "Retail",
+      "pvp": 10.5,
+      "vat": 0.1,
+      "unitCost": 4.6,
+      "mix": 0.04,
+      "waste": 0.02
+    }
+  ],
+  "staff": {
+    "roles": [
+      {
+        "name": "Gerente",
+        "grossSalary": 30000,
+        "fte": [1.0, 1.0, 1.0]
+      },
+      {
+        "name": "Barista",
+        "grossSalary": 23000,
+        "fte": [1.0, 1.5, 1.5]
+      },
+      {
+        "name": "Ayudante de cocina",
+        "grossSalary": 21000,
+        "fte": [1.0, 1.0, 1.0]
+      },
+      {
+        "name": "Fin de semana",
+        "grossSalary": 20000,
+        "fte": [0.5, 0.5, 0.5]
+      }
+    ],
+    "employerSocialSecurity": 0.315,
+    "salaryGrowth": 0.03
+  },
+  "fixedCosts": {
+    "rent": 1900,
+    "utilities": 1450,
+    "fixedServices": 780,
+    "fixedMarketing": 450,
+    "other": 1100,
+    "rentGrowth": 0.02,
+    "fixedMarketingGrowth": 0.025
+  },
+  "capex": {
+    "items": [
+      {
+        "name": "Obra y adecuación",
+        "amount": 65000,
+        "lifeYears": 10
+      },
+      {
+        "name": "Maquinaria de café",
+        "amount": 28000,
+        "lifeYears": 7
+      },
+      {
+        "name": "Mobiliario y menaje",
+        "amount": 15000,
+        "lifeYears": 8
+      },
+      {
+        "name": "Equipo de cocina y frío",
+        "amount": 12000,
+        "lifeYears": 8
+      },
+      {
+        "name": "Tecnología y TPV",
+        "amount": 7000,
+        "lifeYears": 4
+      },
+      {
+        "name": "Licencias y apertura",
+        "amount": 5000,
+        "lifeYears": 5
+      }
+    ],
+    "maintenancePct": 0.015
+  },
+  "financing": {
+    "equity": 90000,
+    "loanAmount": 70000,
+    "loanRate": 0.075,
+    "loanMonths": 60,
+    "openingCash": 21500,
+    "initialStock": 6500,
+    "minimumCash": 10000
+  },
+  "tax": {
+    "corporateRate": 0.25
+  },
+  "workingCapital": {
+    "inventoryDays": 18,
+    "payableDays": 30,
+    "receivableDays": 0
+  },
+  "scenarioOrder": [
+    "pessimistic",
+    "base",
+    "optimistic"
+  ],
+  "scenarios": {
+    "pessimistic": {
+      "name": "Pesimista",
+      "shortName": "Pesimista",
+      "summary": "El invierno largo: demanda un 12 % por debajo del plan, costes al alza y presión salarial.",
+      "demandFactor": 0.88,
+      "demandGrowth": 0.015,
+      "priceGrowth": 0.015,
+      "productCostInflation": 0.045,
+      "personnelFactor": 1.03,
+      "rentFactor": 1.05,
+      "servicesInflation": 0.06,
+      "marketingPct": 0.02,
+      "otherOpexFactor": 1.08,
+      "otherOpexGrowth": 0.03
+    },
+    "base": {
+      "name": "Base",
+      "shortName": "Base",
+      "summary": "El plan creíble: demanda en el potencial del local, precios +2,5 % y costes +3,5 %.",
+      "demandFactor": 1.0,
+      "demandGrowth": 0.04,
+      "priceGrowth": 0.025,
+      "productCostInflation": 0.035,
+      "personnelFactor": 1.0,
+      "rentFactor": 1.0,
+      "servicesInflation": 0.04,
+      "marketingPct": 0.03,
+      "otherOpexFactor": 1.0,
+      "otherOpexGrowth": 0.025
+    },
+    "optimistic": {
+      "name": "Optimista",
+      "shortName": "Optimista",
+      "summary": "Aurora se convierte en referencia: demanda +8 %, precios +3,2 % y mejor productividad.",
+      "demandFactor": 1.08,
+      "demandGrowth": 0.06,
+      "priceGrowth": 0.032,
+      "productCostInflation": 0.028,
+      "personnelFactor": 0.98,
+      "rentFactor": 0.96,
+      "servicesInflation": 0.03,
+      "marketingPct": 0.04,
+      "otherOpexFactor": 0.95,
+      "otherOpexGrowth": 0.02
+    }
+  }
+}

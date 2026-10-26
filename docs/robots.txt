@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gerrcass.github.io/analisis-financiero-cafeteria/sitemap.xml
