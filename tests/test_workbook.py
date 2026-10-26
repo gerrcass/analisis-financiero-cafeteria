@@ -61,8 +61,9 @@ def recalc(workbook_path):
 
 
 def test_workbook_is_generated_with_the_expected_sheets(wb):
-    assert wb.sheetnames[:8] == [
+    assert wb.sheetnames == [
         "Portada",
+        "Resumen",
         "Supuestos",
         "Productos",
         "Personal",
@@ -70,6 +71,7 @@ def test_workbook_is_generated_with_the_expected_sheets(wb):
         "Pesimista",
         "Base",
         "Optimista",
+        "Aprende",
     ]
 
 
@@ -111,6 +113,7 @@ def test_inputs_are_confined_to_assumption_sheets(wb):
         "Personal": personal_allowed,
         "Costos": costos_allowed,
         "Portada": set(),
+        "Resumen": {"B4"},
     }
     for sheet, coordinates in allowed.items():
         ws = wb[sheet]
@@ -259,6 +262,87 @@ def test_costos_sources_equal_uses(wb):
     assert ws["B30"].value == "=B21+Supuestos!B46+Supuestos!B45"
     assert ws["B31"].value == "=Supuestos!B41+Supuestos!B42"
     assert ws["B32"].value.startswith("=IF(B30=B31")
+
+
+def test_summary_has_kpis_comparison_and_chart_blocks(wb):
+    ws = wb["Resumen"]
+    assert ws["B4"].value == 2
+    assert ws["C4"].value == '=CHOOSE(B4,"Pesimista","Base","Optimista")'
+    assert ws["A10"].value == "Base"
+    assert ws["C10"].value == "=Base!B76"
+    assert ws["D10"].value == "=Base!B86"
+    assert ws["E10"].value == "=IFERROR(D10/C10,0)"
+    assert ws["F10"].value == "=Base!B92"
+    assert ws["H10"].value == "=Base!B98"
+    assert ws["I10"].value == "=Base!B103"
+    assert ws["J10"].value == "=Base!B113"
+    assert ws["K10"].value == "=Base!B114"
+    assert ws["B18"].value == "=Pesimista!B113"
+    assert ws["D18"].value == "=Pesimista!AL110"
+    assert ws["B23"].value == "=Pesimista!D76"
+    assert ws["C111"].value.startswith("=CHOOSE($B$4,Pesimista!C15")
+    assert ws["B111"].value == "=Base!C6"
+    assert ws["C151"].value == "=Pesimista!D86"
+    assert ws["C158"].value == "=Base!C140"
+    assert ws["C169"].value == "=Base!B77"
+    assert ws["C174"].value == "=SUM(C169:C173)"
+
+
+def _series_refs(chart):
+    refs = []
+    for series in chart.series:
+        if series.val is not None and series.val.numRef is not None:
+            refs.append(series.val.numRef.f)
+    for subchart in getattr(chart, "_charts", []):
+        for series in subchart.series:
+            if series.val is not None and series.val.numRef is not None:
+                refs.append(series.val.numRef.f)
+    return refs
+
+
+def test_five_live_charts_reference_cell_ranges(wb):
+    ws = wb["Resumen"]
+    assert len(ws._charts) == 5
+    all_refs = []
+    for chart in ws._charts:
+        refs = _series_refs(chart)
+        assert refs, f"gráfico sin series: {chart.title}"
+        for ref in refs:
+            assert "$" in ref and ":" in ref
+            assert "Resumen" in ref
+            all_refs.append(ref)
+    joined = " ".join(all_refs)
+    assert "$C$111:$C$146" in joined
+    assert "$E$111:$E$146" in joined
+    assert "$C$151:$C$153" in joined
+    assert "$C$158:$C$165" in joined
+    assert "$C$169:$C$173" in joined
+    for cell in ("C111", "D111", "E111", "F111", "C151", "C158", "C169"):
+        assert ws[cell].data_type == "f"
+
+
+def test_aprende_sheet_has_chapters_examples_and_questions(wb):
+    ws = wb["Aprende"]
+    text = " ".join(str(cell.value) for row in ws.iter_rows() for cell in row if cell.value)
+    assert "Aprende con Aurora" in text
+    assert "CÓMO USAR ESTA HOJA" in text
+    assert "LOS 10 CAPÍTULOS" in text
+    assert "1. Qué es un modelo financiero" in text
+    assert "10. Decidir con el modelo" in text
+    assert "FÓRMULAS CLAVE" in text
+    assert "GLOSARIO MÍNIMO" in text
+    assert "ERRORES COMUNES" in text
+    assert "PREGUNTAS DE LECTURA" in text
+    formulas = [cell.value for row in ws.iter_rows() for cell in row if cell.data_type == "f"]
+    assert len(formulas) >= 20
+    assert any("TEXT(" in str(formula) for formula in formulas)
+    assert any("Base!B76" in str(formula) for formula in formulas)
+
+
+def test_recalc_summary_values(recalc):
+    summary = recalc["values"]["summary"]
+    assert summary["selector"] == 2
+    assert summary["kpiBase2026"] == pytest.approx(384418.75, abs=1)
 
 
 def test_recalc_has_no_error_values(recalc):

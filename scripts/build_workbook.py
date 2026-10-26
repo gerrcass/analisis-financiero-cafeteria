@@ -18,6 +18,7 @@ from typing import Any, Callable, Iterable
 
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, DoughnutChart, LineChart, Reference
+from openpyxl.chart.axis import ChartLines
 from openpyxl.chart.label import DataLabelList
 from openpyxl.formatting.rule import CellIsRule
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -1184,6 +1185,455 @@ class WorkbookBuilder:
         page_setup(ws, landscape=True, repeat_rows="1:9")
         ws.print_title_cols = "A:B"
 
+    # ----------------------------------------------------------------- resumen
+    def build_resumen(self) -> None:
+        ws = self.wb.create_sheet("Resumen")
+        ws.sheet_properties.tabColor = TERRACOTTA
+        ws.sheet_view.showGridLines = False
+        _set_widths(ws, {"A": 24, "B": 14, "C": 15, "D": 15, "E": 15, "F": 15, "G": 15, "H": 15, "I": 15, "J": 15, "K": 15, "L": 3, "M": 10})
+        ws["A1"] = "Resumen ejecutivo"
+        ws["A1"].font = font(size=20, bold=True)
+        ws["A2"] = "Los tres escenarios en una página. Elige el escenario de los gráficos mensuales y no edites las celdas blancas."
+        ws["A2"].font = font(size=10, color=MUTED)
+
+        ws["A4"] = "Selector de escenario (1/2/3):"
+        ws["B4"] = 2
+        style_input(ws["B4"])
+        self._set_data_validation(ws, "B4", "1", "3")
+        ws["C4"] = '=CHOOSE(B4,"Pesimista","Base","Optimista")'
+        style_calc(ws["C4"])
+        ws["C4"].font = font(bold=True, color=TERRACOTTA)
+        ws["D4"] = "1 = Pesimista · 2 = Base · 3 = Optimista. Cambia el escenario de los gráficos mensuales."
+        ws["D4"].font = font(size=9, color=MUTED)
+
+        style_section(ws, 5, "KPIs por escenario y año", "K")
+        kpi_headers = ["Escenario", "Año", "Ingresos", "EBITDA", "Margen EBITDA", "Beneficio neto", "Margen neto", "Caja final", "Punto equilibrio total", "Payback proyecto", "Payback equity"]
+        for index, value in enumerate(kpi_headers, start=1):
+            ws.cell(row=6, column=index, value=value)
+        style_table_header(ws, 6, 1, 11)
+        scenario_years = [
+            ("Pesimista", "Pesimista", 0), ("Pesimista", "Pesimista", 1), ("Pesimista", "Pesimista", 2),
+            ("Base", "Base", 0), ("Base", "Base", 1), ("Base", "Base", 2),
+            ("Optimista", "Optimista", 0), ("Optimista", "Optimista", 1), ("Optimista", "Optimista", 2),
+        ]
+        year_column = ["B", "C", "D"]
+        for row, (scenario_name, sheet, year_index) in enumerate(scenario_years, start=7):
+            ws[f"A{row}"] = scenario_name
+            ws[f"B{row}"] = str(2026 + year_index)
+            ws[f"C{row}"] = f"={sheet}!{year_column[year_index]}76"
+            ws[f"D{row}"] = f"={sheet}!{year_column[year_index]}86"
+            ws[f"E{row}"] = f"=IFERROR(D{row}/C{row},0)"
+            ws[f"F{row}"] = f"={sheet}!{year_column[year_index]}92"
+            ws[f"G{row}"] = f"=IFERROR(F{row}/C{row},0)"
+            ws[f"H{row}"] = f"={sheet}!{year_column[year_index]}98"
+            ws[f"I{row}"] = f"={sheet}!{year_column[year_index]}103"
+            ws[f"J{row}"] = f"={sheet}!B113"
+            ws[f"K{row}"] = f"={sheet}!B114"
+            for column in ("C", "D", "F", "H", "I"):
+                style_calc(ws[f"{column}{row}"])
+                ws[f"{column}{row}"].number_format = FMT_EUR
+            for column in ("E", "G"):
+                style_calc(ws[f"{column}{row}"])
+                ws[f"{column}{row}"].number_format = FMT_PCT
+            ws[f"J{row}"].number_format = "@"
+            ws[f"K{row}"].number_format = "@"
+            if row in (10, 13):
+                ws[f"A{row}"].font = font(bold=True)
+                ws[f"B{row}"].font = font(bold=True)
+
+        style_section(ws, 16, "Payback y retorno", "K")
+        for index, value in enumerate(["Escenario", "Payback proyecto", "Payback equity", "FCFE acumulado", "Cash-on-cash"], start=1):
+            ws.cell(row=17, column=index, value=value)
+        style_table_header(ws, 17, 1, 5)
+        for row, sheet in zip((18, 19, 20), ("Pesimista", "Base", "Optimista")):
+            ws[f"A{row}"] = sheet
+            ws[f"B{row}"] = f"={sheet}!B113"
+            ws[f"C{row}"] = f"={sheet}!B114"
+            ws[f"D{row}"] = f"={sheet}!AL110"
+            ws[f"E{row}"] = f"={sheet}!B106"
+            ws[f"B{row}"].number_format = "@"
+            ws[f"C{row}"].number_format = "@"
+            style_calc(ws[f"D{row}"])
+            ws[f"D{row}"].number_format = FMT_EUR
+            style_calc(ws[f"E{row}"])
+            ws[f"E{row}"].number_format = FMT_PCT
+
+        style_section(ws, 21, "Comparativa 2028", "K")
+        for index, value in enumerate(["Escenario", "Ingresos", "EBITDA", "Beneficio neto", "Caja final"], start=1):
+            ws.cell(row=22, column=index, value=value)
+        style_table_header(ws, 22, 1, 5)
+        for row, sheet in zip((23, 24, 25), ("Pesimista", "Base", "Optimista")):
+            ws[f"A{row}"] = sheet
+            ws[f"B{row}"] = f"={sheet}!D76"
+            ws[f"C{row}"] = f"={sheet}!D86"
+            ws[f"D{row}"] = f"={sheet}!D92"
+            ws[f"E{row}"] = f"={sheet}!D98"
+            for column in ("B", "C", "D", "E"):
+                style_calc(ws[f"{column}{row}"])
+                ws[f"{column}{row}"].number_format = FMT_EUR
+
+        # Datos de gráficos: mensual
+        ws["A109"] = "Datos de gráficos · mensual (escenario del selector)"
+        ws["A109"].font = font(size=9, italic=True, color=MUTED)
+        for index, value in enumerate(["Mes", "Ingresos", "EBITDA", "Beneficio neto", "Caja final"], start=2):
+            ws.cell(row=110, column=index, value=value)
+        style_table_header(ws, 110, 2, 6)
+        for index, column in enumerate(MONTH_COLS):
+            row = 111 + index
+            ws[f"B{row}"] = f"=Base!{column}6"
+            workspace_col = column
+            ws[f"C{row}"] = f"=CHOOSE($B$4,Pesimista!{workspace_col}15,Base!{workspace_col}15,Optimista!{workspace_col}15)"
+            ws[f"D{row}"] = f"=CHOOSE($B$4,Pesimista!{workspace_col}26,Base!{workspace_col}26,Optimista!{workspace_col}26)"
+            ws[f"E{row}"] = f"=CHOOSE($B$4,Pesimista!{workspace_col}32,Base!{workspace_col}32,Optimista!{workspace_col}32)"
+            ws[f"F{row}"] = f"=CHOOSE($B$4,Pesimista!{workspace_col}48,Base!{workspace_col}48,Optimista!{workspace_col}48)"
+            ws[f"B{row}"].number_format = FMT_MONTH
+            for column_letter in ("C", "D", "E", "F"):
+                style_calc(ws[f"{column_letter}{row}"])
+                ws[f"{column_letter}{row}"].number_format = FMT_EUR
+
+        # Datos de gráficos: comparativa
+        ws["A149"] = "Datos de gráficos · comparativa 2028"
+        ws["A149"].font = font(size=9, italic=True, color=MUTED)
+        for index, value in enumerate(["Escenario", "Ingresos", "EBITDA", "Beneficio neto", "Caja final"], start=1):
+            ws.cell(row=150, column=index, value=value)
+        style_table_header(ws, 150, 1, 5)
+        for row, sheet in zip((151, 152, 153), ("Pesimista", "Base", "Optimista")):
+            ws[f"A{row}"] = sheet
+            ws[f"B{row}"] = f"={sheet}!D76"
+            ws[f"C{row}"] = f"={sheet}!D86"
+            ws[f"D{row}"] = f"={sheet}!D92"
+            ws[f"E{row}"] = f"={sheet}!D98"
+            for column in ("B", "C", "D", "E"):
+                style_calc(ws[f"{column}{row}"])
+                ws[f"{column}{row}"].number_format = FMT_EUR
+
+        # Datos de gráficos: productos y costes
+        ws["A156"] = "Datos de gráficos · productos Base 2028"
+        ws["A156"].font = font(size=9, italic=True, color=MUTED)
+        ws["B157"] = "Producto"
+        ws["C157"] = "Ingresos"
+        style_table_header(ws, 157, 2, 3)
+        for offset, product in enumerate(self.data["products"]):
+            row = 158 + offset
+            ws[f"B{row}"] = product["name"]
+            ws[f"C{row}"] = f"=Base!C{140 + offset}"
+            style_calc(ws[f"C{row}"])
+            ws[f"C{row}"].number_format = FMT_EUR
+        ws["B166"] = "Total"
+        ws["C166"] = "=SUM(C158:C165)"
+        style_total(ws["B166"])
+        style_total(ws["C166"])
+        ws["C166"].number_format = FMT_EUR
+
+        ws["A167"] = "Datos de gráficos · estructura de costes Base 2026"
+        ws["A167"].font = font(size=9, italic=True, color=MUTED)
+        ws["B168"] = "Categoría"
+        ws["C168"] = "Importe"
+        style_table_header(ws, 168, 2, 3)
+        cost_rows = [
+            (169, "Producto", "=Base!B77"),
+            (170, "Personal", "=Base!B79"),
+            (171, "Local", "=Base!B80+Base!B81+Base!B82"),
+            (172, "Marketing", "=Base!B83+Base!B84"),
+            (173, "Otros", "=Base!B85"),
+        ]
+        for row, label, formula in cost_rows:
+            ws[f"B{row}"] = label
+            ws[f"C{row}"] = formula
+            style_calc(ws[f"C{row}"])
+            ws[f"C{row}"].number_format = FMT_EUR
+        ws["B174"] = "Total"
+        ws["C174"] = "=SUM(C169:C173)"
+        style_total(ws["B174"])
+        style_total(ws["C174"])
+        ws["C174"].number_format = FMT_EUR
+
+        # Cinco gráficos con rangos vivos
+        self._add_summary_charts(ws)
+        page_setup(ws, landscape=True)
+        ws.print_area = "A1:T174"
+
+    def _style_summary_chart(self, chart, title: str, y_title: str | None = None) -> None:
+        chart.title = title
+        chart.height = 8
+        chart.width = 15
+        chart.legend.position = "b"
+        chart.y_axis.numFmt = '#,##0'
+        chart.y_axis.majorGridlines = ChartLines()
+        if y_title:
+            chart.y_axis.title = y_title
+        chart.x_axis.delete = False
+        chart.y_axis.delete = False
+
+    def _add_summary_charts(self, ws) -> None:
+        # 1. Ingresos (barras) + EBITDA (línea)
+        bar = BarChart()
+        bar.type = "col"
+        bar.grouping = "clustered"
+        bar.add_data(Reference(ws, min_col=3, min_row=110, max_row=146), titles_from_data=True)
+        bar.set_categories(Reference(ws, min_col=2, min_row=111, max_row=146))
+        bar.series[0].graphicalProperties.solidFill = TERRACOTTA
+        line = LineChart()
+        line.add_data(Reference(ws, min_col=4, min_row=110, max_row=146), titles_from_data=True)
+        line.series[0].graphicalProperties.line.solidFill = SAGE_STRONG
+        line.series[0].graphicalProperties.line.width = 25400
+        bar += line
+        self._style_summary_chart(bar, "Ingresos y EBITDA — escenario seleccionado", "€")
+        ws.add_chart(bar, "M6")
+
+        # 2. Beneficio neto (barras) + caja final (línea, eje secundario)
+        bar2 = BarChart()
+        bar2.type = "col"
+        bar2.grouping = "clustered"
+        bar2.add_data(Reference(ws, min_col=5, min_row=110, max_row=146), titles_from_data=True)
+        bar2.set_categories(Reference(ws, min_col=2, min_row=111, max_row=146))
+        bar2.series[0].graphicalProperties.solidFill = GOLD_STRONG
+        line2 = LineChart()
+        line2.add_data(Reference(ws, min_col=6, min_row=110, max_row=146), titles_from_data=True)
+        line2.series[0].graphicalProperties.line.solidFill = ESPRESSO
+        line2.series[0].graphicalProperties.line.width = 25400
+        line2.y_axis.axId = 200
+        line2.y_axis.title = "Caja final (€)"
+        line2.y_axis.crosses = "max"
+        bar2.y_axis.crosses = "max"
+        bar2.y_axis.title = "Beneficio neto (€)"
+        bar2 += line2
+        self._style_summary_chart(bar2, "Beneficio neto y caja final", "Beneficio neto (€)")
+        ws.add_chart(bar2, "M23")
+
+        # 3. Comparativa de escenarios
+        bar3 = BarChart()
+        bar3.type = "col"
+        bar3.grouping = "clustered"
+        bar3.add_data(Reference(ws, min_col=3, max_col=5, min_row=150, max_row=153), titles_from_data=True)
+        bar3.set_categories(Reference(ws, min_col=1, min_row=151, max_row=153))
+        for index, color in enumerate((TERRACOTTA, SAGE_STRONG, GOLD_STRONG)):
+            bar3.series[index].graphicalProperties.solidFill = color
+        self._style_summary_chart(bar3, "Comparativa de escenarios 2028", "€")
+        ws.add_chart(bar3, "M40")
+
+        # 4. Ingresos por producto Base 2028
+        bar4 = BarChart()
+        bar4.type = "bar"
+        bar4.grouping = "clustered"
+        bar4.add_data(Reference(ws, min_col=3, min_row=157, max_row=165), titles_from_data=True)
+        bar4.set_categories(Reference(ws, min_col=2, min_row=158, max_row=165))
+        bar4.series[0].graphicalProperties.solidFill = TERRACOTTA
+        self._style_summary_chart(bar4, "Ingresos por producto — Base 2028", "€")
+        bar4.legend = None
+        ws.add_chart(bar4, "M57")
+
+        # 5. Estructura de costes Base 2026
+        doughnut = DoughnutChart()
+        doughnut.add_data(Reference(ws, min_col=3, min_row=168, max_row=173), titles_from_data=True)
+        doughnut.set_categories(Reference(ws, min_col=2, min_row=169, max_row=173))
+        doughnut.dataLabels = DataLabelList()
+        doughnut.dataLabels.showPercent = True
+        doughnut.height = 8
+        doughnut.width = 15
+        doughnut.title = "Estructura de costes — Base 2026"
+        doughnut.legend.position = "b"
+        ws.add_chart(doughnut, "M74")
+
+    # ----------------------------------------------------------------- aprende
+    def build_aprende(self) -> None:
+        ws = self.wb.create_sheet("Aprende")
+        ws.sheet_properties.tabColor = GOLD
+        ws.sheet_view.showGridLines = False
+        _set_widths(ws, {"A": 28, "B": 22, "C": 24, "D": 78})
+        ws["A1"] = "Aprende con Aurora"
+        ws["A1"].font = font(size=20, bold=True)
+        ws["A2"] = "La guía resumida del modelo: cómo leerlo, qué significa cada cifra y qué errores invalidan un modelo."
+        ws["A2"].font = font(size=10, color=MUTED)
+
+        style_section(ws, 4, "Cómo usar esta hoja", "D")
+        how = [
+            "Lee el capítulo, mira el ejemplo vivo (se recalcula desde Base) y responde el ejercicio antes de abrir la respuesta.",
+            "Después abre el sitio: el dashboard tiene selector de escenario, laboratorio y la guía completa de 10 capítulos.",
+            "Los ejemplos vivos usan TEXT() y referencias a Base/Pesimista: si cambias un supuesto, el texto cambia.",
+        ]
+        for offset, text in enumerate(how, start=5):
+            ws.merge_cells(f"B{offset}:D{offset}")
+            ws[f"B{offset}"] = text
+            ws[f"B{offset}"].font = font(size=10)
+            ws[f"B{offset}"].alignment = Alignment(wrap_text=True, vertical="top")
+
+        style_section(ws, 9, "Los 10 capítulos", "D")
+        chapters = [
+            (
+                "1. Qué es un modelo financiero",
+                "Un modelo no predice: conecta supuestos con consecuencias. Distingue supuesto, dato y fórmula; un escenario es una hipótesis coherente, no una promesa.",
+                '="Ingresos 2026: "&TEXT(Base!B76,"#,##0 €")&" · EBITDA: "&TEXT(Base!B86,"#,##0 €")',
+                "¿Qué diferencia hay entre beneficio neto y caja final?",
+                '="Beneficio neto: "&TEXT(Base!B92,"#,##0 €")&" · caja final: "&TEXT(Base!B98,"#,##0 €")',
+            ),
+            (
+                "2. La cuenta de resultados",
+                "De ingresos a beneficio neto: COGS, margen bruto, personal, opex, EBITDA, amortización, EBIT, intereses, EBT e impuestos.",
+                '="Margen bruto 2026: "&TEXT(Base!B78/Base!B76,"0.0%")&" · margen EBITDA: "&TEXT(Base!B86/Base!B76,"0.0%")',
+                "¿Cuál es el beneficio neto de 2028 en Base?",
+                '="Beneficio neto 2028: "&TEXT(Base!D92,"#,##0 €")',
+            ),
+            (
+                "3. Ingresos, tickets y estacionalidad",
+                "Tickets/día × días × ítems/ticket × precio neto. La rampa de 6 meses y la estacionalidad explican los valles de enero y agosto.",
+                '="Tickets/día 2026: "&TEXT(Base!B99,"0.0")&" · ticket medio neto: "&TEXT(Base!B100,"0.00 €")',
+                "¿Cuántos tickets vende el local en 2028?",
+                '="Tickets 2028: "&TEXT(Base!AO13,"#,##0")',
+            ),
+            (
+                "4. COGS, merma y margen bruto",
+                "El coste se divide por (1 − merma). La merma se aplica al coste, no al precio. El mix cambia el margen aunque las ventas no cambien.",
+                '="COGS 2026: "&TEXT(Base!B77,"#,##0 €")&" · coste por ítem: "&TEXT(Base!AM16/Base!AM14,"0.00 €")',
+                "¿Cuál es el coste de producto por ítem en 2026?",
+                '="Coste por ítem: "&TEXT(Base!AM16/Base!AM14,"0.00 €")',
+            ),
+            (
+                "5. Costes fijos y punto de equilibrio",
+                "BE EBITDA = costes fijos de caja / contribución por ticket / días. BE total añade amortización e intereses. El margen de seguridad es la distancia a ese punto.",
+                '="BE total 2026: "&TEXT(Base!B103,"0.0")&" tickets/día · margen de seguridad: "&TEXT(Base!B104,"0.0%")',
+                "¿Cuántos tickets/día necesita 2026 para cubrir todo?",
+                '="BE total: "&TEXT(Base!B103,"0.0")&" tickets/día"',
+            ),
+            (
+                "6. Personal y productividad",
+                "El coste empresa incluye salario bruto, FTE y 31,5 % de cotización. El escalón de 2027 (barista 1,5 FTE) explica por qué el margen no mejora ese año.",
+                '="Personal 2027: "&TEXT(Base!C79,"#,##0 €")&" · ingresos por FTE: "&TEXT(Base!C76/Base!C9,"#,##0 €")',
+                "¿Cuánto cuesta el personal en 2027?",
+                '="Personal 2027: "&TEXT(Base!C79,"#,##0 €")',
+            ),
+            (
+                "7. De EBITDA a caja",
+                "La amortización no es caja; el capex y el capital circulante sí. FCFE = FCFF − intereses + escudo − principal. Caja final = caja inicial + FCFE.",
+                '="FCFE 2028: "&TEXT(Base!D97,"#,##0 €")&" · caja final: "&TEXT(Base!D98,"#,##0 €")',
+                "¿Cuánto FCFE acumula el accionista en tres años?",
+                '="FCFE acumulado: "&TEXT(Base!AL110,"#,##0 €")',
+            ),
+            (
+                "8. Deuda, intereses y DSCR",
+                "Préstamo francés: cuota constante, más interés al principio. DSCR = (EBITDA − impuestos) / (intereses + principal).",
+                '="Cuota: "&TEXT(Supuestos!B48,"#,##0.00 €")&" · DSCR 2028: "&TEXT(Base!D105,"0.00")',
+                "¿Cuál es el DSCR de 2028 en Base?",
+                '="DSCR 2028: "&TEXT(Base!D105,"0.00")',
+            ),
+            (
+                "9. Escenarios y sensibilidad",
+                "Solo cambian diez variables. El Pesimista es el test de resistencia: demanda −12 %, costes +4,5 % y presión salarial.",
+                '="Pesimista 2028: EBITDA "&TEXT(Pesimista!D86,"#,##0 €")&" · beneficio neto "&TEXT(Pesimista!D92,"#,##0 €")',
+                "¿Cuánto EBITDA gana el Optimista en 2028?",
+                '="EBITDA Optimista 2028: "&TEXT(Optimista!D86,"#,##0 €")',
+            ),
+            (
+                "10. Decidir con el modelo",
+                "Payback proyecto usa FCFF y 138.500 €; payback equity usa FCFE y 90.000 €. Cash-on-cash = FCFE acumulado / equity. Decide con el Pesimista, no con el Optimista.",
+                '="Payback proyecto/equity: "&Base!B113&" / "&Base!B114&" meses · cash-on-cash: "&TEXT(Base!B106,"0.0%")',
+                "¿Cuál es el cash-on-cash de Base a tres años?",
+                '="Cash-on-cash: "&TEXT(Base!B106,"0.0%")',
+            ),
+        ]
+        row = 11
+        for title, text, example, exercise, answer in chapters:
+            ws.merge_cells(f"A{row}:D{row}")
+            ws[f"A{row}"] = title
+            ws[f"A{row}"].fill = fill(TERRACOTTA)
+            ws[f"A{row}"].font = font(bold=True, color=PAPER, size=11)
+            ws[f"A{row}"].alignment = Alignment(vertical="center")
+            ws.row_dimensions[row].height = 20
+            ws.merge_cells(f"B{row + 1}:D{row + 1}")
+            ws[f"B{row + 1}"] = text
+            ws[f"B{row + 1}"].alignment = Alignment(wrap_text=True, vertical="top")
+            ws.row_dimensions[row + 1].height = 34
+            ws[f"A{row + 2}"] = "Ejemplo vivo"
+            ws[f"A{row + 2}"].font = font(size=9, bold=True, color=SAGE_STRONG)
+            ws.merge_cells(f"B{row + 2}:D{row + 2}")
+            ws[f"B{row + 2}"] = example
+            ws[f"B{row + 2}"].font = font(size=10, color=ESPRESSO)
+            ws[f"A{row + 3}"] = "Ejercicio"
+            ws[f"A{row + 3}"].font = font(size=9, bold=True, color=GOLD_STRONG)
+            ws.merge_cells(f"B{row + 3}:D{row + 3}")
+            ws[f"B{row + 3}"] = exercise
+            ws[f"A{row + 4}"] = "Respuesta"
+            ws[f"A{row + 4}"].font = font(size=9, bold=True, color=MUTED)
+            ws.merge_cells(f"B{row + 4}:D{row + 4}")
+            ws[f"B{row + 4}"] = answer
+            ws[f"B{row + 4}"].font = font(size=10, color=SAGE_STRONG)
+            row += 8
+
+        style_section(ws, 93, "Fórmulas clave", "D")
+        formulas = [
+            ("Precio neto", "PVP / (1 + IVA)"),
+            ("Coste ajustado", "Coste / (1 − merma)"),
+            ("Margen bruto", "Ingresos − COGS"),
+            ("EBITDA", "Margen bruto − personal − opex"),
+            ("EBIT", "EBITDA − amortización"),
+            ("FCFE", "FCFF − intereses + escudo − principal"),
+            ("Caja final", "Caja inicial + FCFE"),
+            ("Break-even total", "(Costes fijos + amortización + intereses) / contribución / días"),
+            ("DSCR", "(EBITDA − impuestos) / (intereses + principal)"),
+            ("Cash-on-cash", "FCFE acumulado / equity"),
+        ]
+        for offset, (label, formula) in enumerate(formulas, start=94):
+            ws[f"A{offset}"] = label
+            ws.merge_cells(f"B{offset}:D{offset}")
+            ws[f"B{offset}"] = formula
+            ws[f"B{offset}"].font = font(name="Consolas", size=9)
+
+        style_section(ws, 105, "Glosario mínimo", "D")
+        glossary = [
+            ("Ticket", "Una compra completa de un cliente en una visita."),
+            ("PVP", "Precio con IVA; el modelo usa el precio neto."),
+            ("COGS", "Coste de los productos vendidos, incluida la merma."),
+            ("Margen bruto", "Ingresos − COGS."),
+            ("EBITDA", "Beneficio antes de intereses, impuestos, amortización y depreciación."),
+            ("EBIT", "EBITDA − amortización."),
+            ("Capital circulante", "Inventario + cobros − proveedores."),
+            ("FCFF", "Caja para todos los financiadores, antes de la deuda."),
+            ("FCFE", "Caja para el accionista, después de la deuda."),
+            ("DSCR", "Cobertura del servicio de la deuda."),
+            ("Payback", "Meses para recuperar la inversión."),
+            ("Escenario", "Combinación coherente de supuestos; no es una predicción."),
+        ]
+        for offset, (term, definition) in enumerate(glossary, start=106):
+            ws[f"A{offset}"] = term
+            ws[f"A{offset}"].font = font(bold=True, size=9)
+            ws.merge_cells(f"B{offset}:D{offset}")
+            ws[f"B{offset}"] = definition
+            ws[f"B{offset}"].font = font(size=9)
+
+        style_section(ws, 119, "Errores comunes", "D")
+        errors = [
+            "Usar el PVP con IVA como ingreso: infla las ventas un 10 %.",
+            "Aplicar la merma al precio en vez de al coste.",
+            "Restar el capex del EBITDA: el capex es caja de inversión.",
+            "Confundir beneficio neto con caja: la amortización y el circulante no son caja.",
+            "Calcular el DSCR sobre el saldo del préstamo en vez de sobre la cuota.",
+            "Presupuestar con el Optimista y esconder el Pesimista.",
+            "Pegar valores en las celdas calculadas y romper el recálculo.",
+            "Comparar el payback del proyecto con el del equity como si midieran lo mismo.",
+        ]
+        for offset, text in enumerate(errors, start=120):
+            ws.merge_cells(f"A{offset}:D{offset}")
+            ws[f"A{offset}"] = "· " + text
+            ws[f"A{offset}"].font = font(size=9)
+
+        style_section(ws, 129, "Preguntas de lectura", "D")
+        questions = [
+            "¿Por qué enero factura menos que diciembre con el mismo local?",
+            "¿Qué línea del P&L no es una salida de caja del periodo?",
+            "¿Por qué el payback del equity es menor que el del proyecto?",
+            "¿Qué pasa con el DSCR del Pesimista en 2028? ¿Qué decisión sugiere?",
+            "¿Qué supuesto es el menos evidenciado y cómo lo validarías?",
+            "Si el alquiler sube un 10 %, ¿cuánto baja el EBITDA de 2026?",
+        ]
+        for offset, question in enumerate(questions, start=130):
+            ws.merge_cells(f"A{offset}:D{offset}")
+            ws[f"A{offset}"] = "· " + question
+            ws[f"A{offset}"].font = font(size=9)
+
+        ws["A138"] = "Aviso: material educativo. No es asesoramiento financiero, fiscal ni legal."
+        ws["A138"].font = font(size=9, bold=True, color=NEGATIVE)
+        page_setup(ws, landscape=False)
+
     # ----------------------------------------------------------------- build
     def build(self, path: Path) -> Path:
         self.build_portada()
@@ -1193,6 +1643,12 @@ class WorkbookBuilder:
         self.build_costos()
         for key in SCENARIO_SHEETS:
             self.build_scenario(key)
+        self.build_resumen()
+        self.build_aprende()
+
+        # Orden del brief: Resumen en segunda posición y Aprende al final.
+        resumen_index = self.wb.sheetnames.index("Resumen")
+        self.wb.move_sheet("Resumen", offset=1 - resumen_index)
 
         self.wb.calculation.fullCalcOnLoad = True
         self.wb.calculation.forceFullCalc = True
@@ -1201,6 +1657,7 @@ class WorkbookBuilder:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.wb.save(path)
         return path
+
 
 
 def build_workbook(model_path: str | Path = MODEL_PATH, output: str | Path = WORKBOOK_PATH) -> Path:

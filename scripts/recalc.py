@@ -105,9 +105,21 @@ def key_values(cells: dict[str, dict[str, Any]]) -> dict[str, Any]:
             "checkProduct2028": values.get("C149"),
             "checkTax2028": values.get("D70"),
         }
+    summary_cells = cells.get("RESUMEN", {})
     out["summary"] = {
-        "selector": cells.get("RESUMEN", {}).get("B4") if "RESUMEN" in cells else None,
-        "kpiBase2026": cells.get("RESUMEN", {}).get("C10") if "RESUMEN" in cells else None,
+        "selector": summary_cells.get("B4"),
+        "kpiBase2026": summary_cells.get("C10"),
+        "monthly": [
+            [summary_cells.get(f"{column}{111 + offset}") for column in ("C", "D", "E", "F")]
+            for offset in range(36)
+        ],
+        "comparison": [
+            [summary_cells.get(f"{column}{151 + row}") for column in ("B", "C", "D", "E")]
+            for row in range(3)
+        ],
+        "products": [summary_cells.get(f"C{158 + offset}") for offset in range(8)],
+        "costs": [summary_cells.get(f"C{169 + offset}") for offset in range(5)],
+        "costsTotal": summary_cells.get("C174"),
     }
     return out
 
