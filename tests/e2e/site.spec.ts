@@ -48,6 +48,51 @@ test.describe('Cafetería Aurora — dashboard', () => {
     await expect(page).toHaveURL(/anio=2028/);
   });
 
+  test('los deltas de KPI no muestran NaN', async ({ page }) => {
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    const texts2028 = (await page.locator('.kpi-card .delta').allTextContents()).join(' ');
+    expect(texts2028).not.toContain('NaN');
+    await expect(page.locator('#snap-margin-delta')).toContainText('pp');
+    await page.getByRole('tab', { name: '2027' }).click();
+    const texts2027 = (await page.locator('.kpi-card .delta').allTextContents()).join(' ');
+    expect(texts2027).not.toContain('NaN');
+    await expect(page.locator('#snap-margin-delta')).toContainText('pp');
+  });
+
+  test('productos expone todas las columnas y una pista de scroll en móvil', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    const headers = await page.locator('#table-products thead').innerText();
+    expect(headers).toContain('MIX');
+    expect(headers).toContain('INGRESOS');
+    expect(headers).toContain('% INGRESOS');
+    await expect(page.locator('#product-scroll-hint')).toBeVisible();
+    await expect(page.locator('#product-scroll-hint')).toContainText('Desliza');
+    await expect(page.locator('#chart-products .product-bars-mobile')).toBeVisible();
+    await expect(page.locator('#chart-products .pb-row')).toHaveCount(8);
+    await expect(page.locator('#reading-products')).toContainText('71,1');
+    await expect(page.locator('#reading-products')).not.toContainText('71,7');
+  });
+
+  test('costes explicita el denominador de la dona y de las tarjetas', async ({ page }) => {
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await expect(page.locator('#costs-sub')).toContainText('% del gasto total');
+    await expect(page.locator('#costs-sub')).toContainText('% de los ingresos');
+    await expect(page.locator('#costs-caption')).toContainText('gasto total');
+    await page.locator('#costes summary').click();
+    await expect(page.locator('#table-costs caption')).toContainText('% de los ingresos');
+    await expect(page.locator('#reading-costs')).toContainText('gasto total');
+    await expect(page.locator('#reading-costs')).toContainText('de los ingresos');
+  });
+
+  test('los enlaces de descarga y repositorio son correctos', async ({ page }) => {
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    const download = page.locator('#descarga a[download]').first();
+    await expect(download).toHaveAttribute('href', './assets/Cafeteria-Aurora-Modelo-Financiero.xlsx');
+    const repo = page.getByRole('link', { name: 'Ver el repositorio' });
+    await expect(repo).toHaveAttribute('href', 'https://github.com/gerrcass/analisis-financiero-cafeteria');
+  });
+
   test('cambia de año y actualiza tablas y gráficos juntos', async ({ page }) => {
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.getByRole('tab', { name: '2026' }).click();
@@ -153,7 +198,7 @@ test.describe('Cafetería Aurora — dashboard', () => {
       await expect(chart.locator('desc')).not.toHaveCount(0);
       await expect(chart).toHaveAttribute('aria-labelledby', /.+-title .+-desc/);
     }
-    await expect(page.locator('#table-products caption')).toContainText('Carta y margen');
+    await expect(page.locator('#table-products caption')).toContainText('Carta y márgenes');
     await expect(page.locator('#model-annual caption')).toContainText('Cuenta de resultados');
   });
 });

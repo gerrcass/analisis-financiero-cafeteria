@@ -922,6 +922,73 @@ button {
   color: var(--muted);
 }
 
+
+/* Productos -------------------------------------------------------------- */
+.product-layout {
+  display: grid;
+  gap: 24px;
+}
+
+.product-bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.product-table {
+  min-width: 760px;
+}
+
+.scroll-hint {
+  display: none;
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: var(--terracotta-strong);
+  font-weight: 600;
+}
+
+.product-bars-mobile {
+  display: grid;
+  gap: 12px;
+}
+
+.product-bars-mobile .pb-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 1.1fr) minmax(0, 1.6fr) 58px;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.product-bars-mobile .pb-name {
+  line-height: 1.2;
+}
+
+.product-bars-mobile .pb-track {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.product-bars-mobile .pb-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--terracotta);
+}
+
+.product-bars-mobile .pb-row:nth-child(2n) .pb-fill {
+  background: var(--sage-strong);
+}
+
+.product-bars-mobile .pb-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
 /* Break-even bullet ------------------------------------------------------ */
 .break-even-cards {
   display: grid;
@@ -1651,7 +1718,8 @@ button {
 @media (max-width: 1024px) {
   .split,
   .lab-teaser,
-  .lab-layout {
+  .lab-layout,
+  .product-bottom {
     grid-template-columns: 1fr;
   }
 
@@ -1767,6 +1835,12 @@ button {
 
   .learn-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-hint {
+    display: block;
   }
 }
 

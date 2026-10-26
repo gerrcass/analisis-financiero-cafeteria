@@ -172,19 +172,17 @@ function renderHero() {
   setText('kpi-payback-meta', `equity: ${paybackText(result.paybackEquityMonths)} · ${name} ${state.year}`);
 
   const cards = [
-    ['snap-revenue', annual.revenue, annual.revenue, previous?.revenue, false],
-    ['snap-ebitda', annual.ebitda, annual.ebitda, previous?.ebitda, false],
-    ['snap-margin', annual.ebitdaMargin, pct1.format(annual.ebitdaMargin), previous?.ebitdaMargin, true],
-    ['snap-net', annual.netIncome, annual.netIncome, previous?.netIncome, false],
-    ['snap-cash', annual.closingCash, annual.closingCash, previous?.closingCash, false]
+    { id: 'snap-revenue', raw: annual.revenue, display: eur0.format(annual.revenue), previous: previous?.revenue, margin: false },
+    { id: 'snap-ebitda', raw: annual.ebitda, display: eur0.format(annual.ebitda), previous: previous?.ebitda, margin: false },
+    { id: 'snap-margin', raw: annual.ebitdaMargin, display: pct1.format(annual.ebitdaMargin), previous: previous?.ebitdaMargin, margin: true },
+    { id: 'snap-net', raw: annual.netIncome, display: eur0.format(annual.netIncome), previous: previous?.netIncome, margin: false },
+    { id: 'snap-cash', raw: annual.closingCash, display: eur0.format(annual.closingCash), previous: previous?.closingCash, margin: false }
   ];
-  for (const [id, raw, current, previousValue, margin] of cards) {
-    const formatted = typeof current === 'number' && !margin ? eur0.format(current) : String(current);
-    setValue(id, raw, formatted);
-    const deltaId = `${id}-delta`;
-    const element = document.getElementById(deltaId);
+  for (const card of cards) {
+    setValue(card.id, card.raw, card.display);
+    const element = document.getElementById(`${card.id}-delta`);
     if (!element) continue;
-    const delta = deltaCell(current, previousValue, { margin });
+    const delta = deltaCell(card.raw, card.previous, { margin: card.margin });
     element.textContent = delta.text;
     element.className = `delta ${delta.className}`;
   }
@@ -378,66 +376,104 @@ function renderProducts() {
   const annual = activeAnnual();
   const name = SCENARIO_META[state.scenario].name;
   const block = result.productProfitability.find((item) => item.year === state.year);
-  const rows = [...block.products]
-    .sort((a, b) => b.revenue - a.revenue)
+  const yearIndex = state.year - 2026;
+  const priceIndex = (1 + result.scenario.priceGrowth) ** yearIndex;
+  const costIndex = (1 + result.scenario.productCostInflation) ** yearIndex;
+  const rows = block.products
     .map((product) => {
       const meta = result.products.find((item) => item.id === product.id);
-      const share = product.revenue / annual.revenue;
+      const netPrice = meta.netPrice * priceIndex;
+      const adjustedCost = meta.adjustedCost * costIndex;
+      const unitMargin = product.units ? (product.revenue - product.cogs) / product.units : netPrice - adjustedCost;
       return {
         product: meta,
+        pvp: meta.pvp * priceIndex,
+        netPrice,
+        adjustedCost,
+        unitMargin,
+        marginPct: product.marginPct,
         revenue: product.revenue,
-        share,
-        marginPct: product.marginPct
+        share: product.revenue / annual.revenue
       };
-    });
+    })
+    .sort((a, b) => b.revenue - a.revenue);
 
   setHtml(
     'table-products',
     dataTable({
-      caption: `Carta y margen · ${name} · ${state.year}`,
+      caption: `Carta y márgenes · ${name} · ${state.year} · importes del año activo`,
       headers: ['Producto', 'PVP', 'Precio neto', 'Coste', 'Margen unit.', 'Margen %', 'Mix', 'Ingresos', '% ingresos'],
       rows: rows.map((row) => [
         `<strong>${esc(row.product.name)}</strong>`,
-        eur2.format(row.product.pvp),
-        eur2.format(row.product.netPrice),
-        eur2.format(row.product.adjustedCost),
-        eur2.format(row.product.unitMargin),
+        eur2.format(row.pvp),
+        eur2.format(row.netPrice),
+        eur2.format(row.adjustedCost),
+        eur2.format(row.unitMargin),
         pct1.format(row.marginPct),
         pct1.format(row.product.mix),
         eur0.format(row.revenue),
         pct1.format(row.share)
-      ])
+      ]),
+      tableClass: 'product-table',
+      firstColumnSticky: true
     })
   );
-  setText('products-sub', `${name} · ${state.year} · ordenado por ingresos.`);
+  setText('products-sub', `${name} · ${state.year} · PVP y coste con los índices del año; ordenado por ingresos.`);
 
-  const sortedByMargin = [...result.products].sort((a, b) => b.unitMargin - a.unitMargin);
-  setHtml(
-    'chart-products',
-    horizontalBarChart({
-      id: 'products-chart',
-      title: `Margen unitario por producto — ${name} ${state.year}`,
-      description: `Margen unitario de los ocho productos, de mayor a menor: ${sortedByMargin
-        .map((product) => `${product.name} ${eur2.format(product.unitMargin)}`)
-        .join('; ')}.`,
-      items: sortedByMargin.map((product, index) => ({
-        label: product.name,
-        value: product.unitMargin,
-        color: index % 2 === 0 ? COLORS.terracotta : COLORS.sageStrong
-      })),
-      valueLabel: 'Margen unitario',
-      height: 330
-    })
-  );
+  const sortedByMargin = [...rows].sort((a, b) => b.unitMargin - a.unitMargin);
+  const description = `Margen unitario de los ocho productos en ${state.year}, de mayor a menor: ${sortedByMargin
+    .map((row) => `${row.product.name} ${eur2.format(row.unitMargin)}`)
+    .join('; ')}.`;
+  const mobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches;
+  if (mobile) {
+    const maxMargin = sortedByMargin[0]?.unitMargin || 1;
+    setHtml(
+      'chart-products',
+      `<div class="product-bars-mobile" aria-label="${esc(description)}">
+        ${sortedByMargin
+          .map(
+            (row) => `<div class="pb-row">
+              <span class="pb-name">${esc(row.product.name)}</span>
+              <span class="pb-track" aria-hidden="true"><span class="pb-fill" style="width:${(row.unitMargin / maxMargin) * 100}%"></span></span>
+              <span class="pb-value">${eur2.format(row.unitMargin)}</span>
+            </div>`
+          )
+          .join('')}
+      </div>`
+    );
+  } else {
+    setHtml(
+      'chart-products',
+      horizontalBarChart({
+        id: 'products-chart',
+        title: `Margen unitario por producto — ${name} ${state.year}`,
+        description,
+        items: sortedByMargin.map((row, index) => ({
+          label: row.product.name,
+          value: row.unitMargin,
+          color: index % 2 === 0 ? COLORS.terracotta : COLORS.sageStrong
+        })),
+        valueLabel: 'Margen unitario',
+        valueFormatter: (value) => eur2.format(value),
+        height: 310
+      })
+    );
+  }
+  setText('product-chart-caption', `Margen unitario de ${state.year}, ordenado de mayor a menor. La barra no es el margen %: son euros por unidad vendida.`);
 
-  const highestPct = [...result.products].sort((a, b) => b.marginPct - a.marginPct)[0];
+  const highestPct = [...rows].sort((a, b) => b.marginPct - a.marginPct)[0];
   const highestAbsolute = sortedByMargin[0];
-  const bag = result.products.find((product) => product.id === 'bolsa-cafe');
-  const bagShare = block.products.find((product) => product.id === 'bolsa-cafe').revenue / annual.revenue;
+  const bag = rows.find((row) => row.product.id === 'bolsa-cafe');
   setText(
     'reading-products',
-    `${highestPct.name} tiene el mayor margen % (${pct1.format(highestPct.marginPct)}). La unidad con mayor margen absoluto es ${highestAbsolute.name} (${eur2.format(highestAbsolute.unitMargin)}), y la bolsa de café aporta el ${pct1.format(bagShare)} de los ingresos con solo el ${pct1.format(bag.mix)} del mix.`
+    `En ${state.year}, ${highestPct.product.name} tiene el mayor margen % (${pct1.format(highestPct.marginPct)}). La unidad con mayor margen absoluto es ${highestAbsolute.product.name} (${eur2.format(highestAbsolute.unitMargin)}). La bolsa de café aporta el ${pct1.format(bag.share)} de los ingresos con solo el ${pct1.format(bag.product.mix)} del mix.`
   );
+  setText('product-best-pct', pct1.format(highestPct.marginPct));
+  setText('product-best-pct-meta', highestPct.product.name);
+  setText('product-best-abs', eur2.format(highestAbsolute.unitMargin));
+  setText('product-best-abs-meta', highestAbsolute.product.name);
+  setText('product-bag-share', pct1.format(bag.share));
+  setText('product-bag-mix', pct1.format(bag.product.mix));
 }
 
 function renderCosts() {
@@ -460,20 +496,20 @@ function renderCosts() {
     donutChart({
       id: 'costs-chart',
       title: `Estructura de costes — ${name} ${state.year}`,
-      description: `Producto ${eur0.format(items[0].value)}, personal ${eur0.format(items[1].value)}, local ${eur0.format(items[2].value)}, marketing ${eur0.format(items[3].value)} y otros ${eur0.format(items[4].value)}.`,
+      description: `Reparto del gasto total (${eur0.format(total)}): producto ${eur0.format(items[0].value)}, personal ${eur0.format(items[1].value)}, local ${eur0.format(items[2].value)}, marketing ${eur0.format(items[3].value)} y otros ${eur0.format(items[4].value)}. Los porcentajes de la dona son sobre el gasto total.`,
       items,
-      centerLabel: 'Costes totales'
+      centerLabel: 'Gasto total'
     })
   );
-  setText('costs-sub', `${name} · ${state.year} · cinco categorías, no ocho porciones.`);
+  setText('costs-sub', `${name} · ${state.year}. Dona: % del gasto total. Tabla y tarjetas: % de los ingresos.`);
   setText(
     'costs-caption',
-    `Producto y personal concentran el ${pct1.format((items[0].value + items[1].value) / annual.revenue)} de los ingresos.`
+    `El gasto total asciende a ${eur0.format(total)}. La dona reparte ese gasto; producto y personal suman el ${pct1.format((items[0].value + items[1].value) / annual.revenue)} de los ingresos.`
   );
   setHtml(
     'table-costs',
     dataTable({
-      caption: `Costes por categoría · ${name} · ${state.year}`,
+      caption: `Costes por categoría · ${name} · ${state.year} · importe y % de los ingresos`,
       headers: ['Categoría', 'Importe', '% ingresos'],
       rows: [
         ...items.map((item) => [esc(item.label), eur0.format(item.value), pct1.format(item.value / annual.revenue)]),
@@ -488,7 +524,7 @@ function renderCosts() {
   setText('cost-personnel-meta', `${pct1.format(annual.personnel / annual.revenue)} de los ingresos`);
   setText(
     'reading-costs',
-    `Producto ${pct1.format(items[0].value / annual.revenue)} + personal ${pct1.format(items[1].value / annual.revenue)} = ${pct1.format((items[0].value + items[1].value) / annual.revenue)} de cada euro. El resto se reparte entre local, marketing y otros.`
+    `Producto ${pct1.format(items[0].value / annual.revenue)} de los ingresos + personal ${pct1.format(items[1].value / annual.revenue)} de los ingresos = ${pct1.format((items[0].value + items[1].value) / annual.revenue)} de cada euro facturado. La dona reparte el gasto total; esta lectura y las tarjetas usan ingresos como denominador.`
   );
 }
 
@@ -702,5 +738,10 @@ async function init() {
     console.error(error);
   }
 }
+
+const productMedia = window.matchMedia('(max-width: 600px)');
+productMedia.addEventListener?.('change', () => {
+  if (state.inputs) renderProducts();
+});
 
 init();
