@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cafetería Aurora — modelo financiero interactivo 2026–2028</title>
+    <meta name="description" content="Dashboard financiero de Cafetería Aurora: 36 meses, tres escenarios, fórmulas vivas, laboratorio de supuestos y guía para aprender finanzas con el caso.">
+    <link rel="canonical" href="https://gerrcass.github.io/analisis-financiero-cafeteria/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cafetería Aurora — modelo financiero interactivo">
+    <meta property="og:description" content="36 meses, tres escenarios y todas las fórmulas a la vista. La economía de una cafetería de especialidad en Zaragoza.">
+    <meta property="og:url" content="https://gerrcass.github.io/analisis-financiero-cafeteria/">
+    <meta property="og:image" content="https://gerrcass.github.io/analisis-financiero-cafeteria/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="./index.html" aria-label="Cafetería Aurora, inicio">
+          <img src="./assets/aurora-mark.svg" alt="" width="34" height="34">
+          <span class="brand-word">
+            <strong>Aurora</strong>
+            <span>café de especialidad</span>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">Abrir menú</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Principal">
+          <a href="#modelo">Modelo</a>
+          <a href="#escenarios">Escenarios</a>
+          <a href="#laboratorio">Laboratorio</a>
+          <a href="./aprende.html">Aprende</a>
+          <a class="header-cta" href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>Descargar Excel</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="hero">
+        <div class="wrap">
+          <div class="hero-copy">
+            <p class="eyebrow">Cafetería Aurora · Zaragoza · 2026–2028</p>
+            <h1>Un café se puede modelar. <em>Y se puede tocar.</em></h1>
+            <p class="hero-sub">
+              36 meses, tres escenarios y todas las fórmulas a la vista. Así se ve la economía de una
+              cafetería de especialidad en Zaragoza.
+            </p>
+            <div class="hero-note">
+              <span>Base 2028 por defecto</span>
+              <span>Datos netos de IVA</span>
+              <span>Modelo educativo</span>
+            </div>
+          </div>
+
+          <div class="kpi-strip" aria-label="KPIs del escenario y año activos">
+            <div class="kpi-hero">
+              <span class="label">Ingresos netos</span>
+              <strong class="value" id="kpi-revenue" data-value="">—</strong>
+              <span class="meta" id="kpi-revenue-meta">—</span>
+            </div>
+            <div class="kpi-hero">
+              <span class="label">EBITDA</span>
+              <strong class="value" id="kpi-ebitda" data-value="">—</strong>
+              <span class="meta" id="kpi-ebitda-meta">—</span>
+            </div>
+            <div class="kpi-hero">
+              <span class="label">Beneficio neto</span>
+              <strong class="value" id="kpi-net" data-value="">—</strong>
+              <span class="meta" id="kpi-net-meta">—</span>
+            </div>
+            <div class="kpi-hero">
+              <span class="label">Caja final</span>
+              <strong class="value" id="kpi-cash" data-value="">—</strong>
+              <span class="meta" id="kpi-cash-meta">—</span>
+            </div>
+            <div class="kpi-hero">
+              <span class="label">Payback</span>
+              <strong class="value" id="kpi-payback" data-value="">—</strong>
+              <span class="meta" id="kpi-payback-meta">—</span>
+            </div>
+          </div>
+
+          <div class="error-box" id="app-error" role="alert" hidden>
+            No se pudo cargar el modelo. Sirve el sitio por HTTP (por ejemplo, <code>make serve</code>) y recarga.
+          </div>
+        </div>
+      </section>
+
+      <section class="selector" id="escenarios" aria-label="Selector de escenario y año">
+        <div class="wrap selector-inner">
+          <div class="control-group">
+            <span class="control-label" id="scenario-label">Escenario</span>
+            <div class="segmented" id="scenario-controls" role="group" aria-labelledby="scenario-label">
+              <button type="button" data-scenario="pessimistic" aria-pressed="false">Pesimista</button>
+              <button type="button" data-scenario="base" aria-pressed="true">Base</button>
+              <button type="button" data-scenario="optimistic" aria-pressed="false">Optimista</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <span class="control-label" id="year-label">Año</span>
+            <div class="year-tabs" id="year-controls" role="tablist" aria-labelledby="year-label">
+              <button type="button" role="tab" data-year="2026" aria-selected="false">2026</button>
+              <button type="button" role="tab" data-year="2027" aria-selected="false">2027</button>
+              <button type="button" role="tab" data-year="2028" aria-selected="true">2028</button>
+            </div>
+          </div>
+          <p class="scenario-context" id="scenario-context" aria-live="polite">
+            Base: el plan que se monitorea. Pesimista: el test de resistencia. Optimista: el caso de expansión.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="modelo">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">01 · La foto</span>
+              <h2>El negocio en cinco cifras</h2>
+            </div>
+            <p>Las mismas cifras que el Excel, calculadas en el navegador desde el contrato de supuestos.</p>
+          </div>
+
+          <div class="kpi-grid" aria-label="Foto del negocio">
+            <article class="kpi-card">
+              <span class="label">Ingresos</span>
+              <strong class="value" id="snap-revenue">—</strong>
+              <span class="delta" id="snap-revenue-delta">—</span>
+            </article>
+            <article class="kpi-card">
+              <span class="label">EBITDA</span>
+              <strong class="value" id="snap-ebitda">—</strong>
+              <span class="delta" id="snap-ebitda-delta">—</span>
+            </article>
+            <article class="kpi-card">
+              <span class="label">Margen EBITDA</span>
+              <strong class="value" id="snap-margin">—</strong>
+              <span class="delta" id="snap-margin-delta">—</span>
+            </article>
+            <article class="kpi-card">
+              <span class="label">Beneficio neto</span>
+              <strong class="value" id="snap-net">—</strong>
+              <span class="delta" id="snap-net-delta">—</span>
+            </article>
+            <article class="kpi-card">
+              <span class="label">Caja final</span>
+              <strong class="value" id="snap-cash">—</strong>
+              <span class="delta" id="snap-cash-delta">—</span>
+            </article>
+          </div>
+
+          <div class="split" style="margin-top: 24px">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Los tres escenarios, lado a lado</h3>
+                  <p class="sub" id="comparison-sub">Mismo año, tres hipótesis. Sin esconder el Pesimista.</p>
+                </div>
+              </div>
+              <div class="chart" id="chart-comparison"></div>
+              <p class="chart-caption" id="comparison-caption"></p>
+              <details class="details">
+                <summary>Ver los datos de la comparativa</summary>
+                <div id="table-comparison"></div>
+              </details>
+            </article>
+            <aside class="card stack">
+              <div>
+                <p class="kicker">Lectura</p>
+                <p class="reading" id="comparison-reading" style="border-top: 0; padding-top: 0; margin-top: 8px"></p>
+              </div>
+              <div class="mini-grid">
+                <div class="mini-card">
+                  <span class="label">Rango de ingresos</span>
+                  <strong class="value" id="range-revenue">—</strong>
+                  <span class="meta" id="range-revenue-meta">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Rango de EBITDA</span>
+                  <strong class="value" id="range-ebitda">—</strong>
+                  <span class="meta" id="range-ebitda-meta">—</span>
+                </div>
+              </div>
+              <p class="small muted" style="margin: 0">
+                El Pesimista no es un desplegable: es el caso que decide si la inversión resiste.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="ingresos">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">02 · Ingresos</span>
+              <h2>Ingresos y EBITDA</h2>
+            </div>
+            <p>La rampa de 2026, el escalón de personal de 2027 y la ampliación de margen de 2028, mes a mes.</p>
+          </div>
+
+          <div class="split">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>36 meses de venta y caja operativa</h3>
+                  <p class="sub" id="revenue-sub">Barras: ingresos netos. Línea: EBITDA.</p>
+                </div>
+              </div>
+              <div class="chart" id="chart-revenue"></div>
+              <p class="chart-caption" id="revenue-caption"></p>
+              <details class="details">
+                <summary>Ver la serie mensual</summary>
+                <div id="table-revenue-monthly"></div>
+              </details>
+            </article>
+            <aside class="card stack">
+              <div class="mini-grid">
+                <div class="mini-card">
+                  <span class="label">Margen EBITDA</span>
+                  <strong class="value" id="revenue-margin">—</strong>
+                  <span class="meta" id="revenue-margin-meta">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Ticket medio neto</span>
+                  <strong class="value" id="revenue-ticket">—</strong>
+                  <span class="meta">con IVA: <span id="revenue-ticket-gross">—</span></span>
+                </div>
+              </div>
+              <div>
+                <h3>Resumen anual</h3>
+                <div id="table-revenue-annual" style="margin-top: 10px"></div>
+              </div>
+              <p class="reading" id="reading-revenue"></p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="caja">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">03 · Caja y deuda</span>
+              <h2>El beneficio no es la caja</h2>
+            </div>
+            <p>La caja final y la deuda viva mes a mes. El mínimo de caja es el mes que decide si el local respira.</p>
+          </div>
+
+          <div class="split">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Caja final y deuda viva</h3>
+                  <p class="sub" id="cash-sub">36 meses del escenario activo.</p>
+                </div>
+              </div>
+              <div class="chart" id="chart-cash"></div>
+              <p class="chart-caption" id="cash-caption"></p>
+              <details class="details">
+                <summary>Ver la serie mensual de caja y deuda</summary>
+                <div id="table-cash-monthly"></div>
+              </details>
+            </article>
+            <aside class="card stack">
+              <div class="mini-grid" id="cash-cards">
+                <div class="mini-card">
+                  <span class="label">Caja mínima</span>
+                  <strong class="value" id="cash-min">—</strong>
+                  <span class="meta" id="cash-min-meta">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Payback proyecto</span>
+                  <strong class="value" id="cash-payback">—</strong>
+                  <span class="meta" id="cash-payback-meta">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">DSCR <span id="dscr-year">2028</span></span>
+                  <strong class="value" id="cash-dscr">—</strong>
+                  <span class="meta">EBITDA − impuestos / servicio de deuda</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Deuda viva <span id="debt-year">2028</span></span>
+                  <strong class="value" id="cash-debt">—</strong>
+                  <span class="meta">saldo al cierre del año</span>
+                </div>
+              </div>
+              <p class="reading" id="reading-cash"></p>
+              <p class="small muted" style="margin: 0">
+                Si la caja baja de 10.000 €, el modelo avisa. No financia automáticamente ni oculta el valle.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="productos">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">04 · Unit economics</span>
+              <h2>Ocho productos, un margen</h2>
+            </div>
+            <p>PVP con IVA en la carta, precio neto en el modelo y coste ajustado por merma. El mix se mantiene.</p>
+          </div>
+
+          <div class="product-layout">
+            <article class="card product-table-card">
+              <div class="card-head">
+                <div>
+                  <h3>La carta, ordenada por ingresos</h3>
+                  <p class="sub" id="products-sub">Escenario y año activos.</p>
+                </div>
+              </div>
+              <p class="scroll-hint" id="product-scroll-hint">Desliza para ver Mix, Ingresos y % de ingresos →</p>
+              <div id="table-products"></div>
+            </article>
+            <div class="product-bottom">
+              <article class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Margen unitario por producto</h3>
+                    <p class="sub">Precio neto − coste ajustado por merma del año activo.</p>
+                  </div>
+                </div>
+                <div class="chart" id="chart-products"></div>
+                <p class="chart-caption" id="product-chart-caption"></p>
+              </article>
+              <aside class="card stack">
+                <div>
+                  <p class="kicker">Lectura</p>
+                  <p class="reading" id="reading-products" style="border-top: 0; padding-top: 0; margin-top: 8px"></p>
+                </div>
+                <div class="mini-grid">
+                  <div class="mini-card">
+                    <span class="label">Mayor margen %</span>
+                    <strong class="value" id="product-best-pct">—</strong>
+                    <span class="meta" id="product-best-pct-meta">—</span>
+                  </div>
+                  <div class="mini-card">
+                    <span class="label">Mayor margen absoluto</span>
+                    <strong class="value" id="product-best-abs">—</strong>
+                    <span class="meta" id="product-best-abs-meta">—</span>
+                  </div>
+                  <div class="mini-card">
+                    <span class="label">Peso de la bolsa</span>
+                    <strong class="value" id="product-bag-share">—</strong>
+                    <span class="meta">de los ingresos del año</span>
+                  </div>
+                  <div class="mini-card">
+                    <span class="label">Mix de la bolsa</span>
+                    <strong class="value" id="product-bag-mix">—</strong>
+                    <span class="meta">unidades, no ingresos</span>
+                  </div>
+                </div>
+                <p class="small muted" style="margin: 0">El PVP y el coste se muestran con el índice de precios y costes del año activo. El mix es estructural.</p>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="costes">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">05 · Costes</span>
+              <h2>Dónde se va el dinero</h2>
+            </div>
+            <p>Cinco categorías, no ocho porciones: producto, personal, local, marketing y otros.</p>
+          </div>
+
+          <div class="split">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Estructura de costes</h3>
+                  <p class="sub" id="costs-sub">Escenario y año activos.</p>
+                </div>
+              </div>
+              <div class="chart" id="chart-costs"></div>
+              <p class="chart-caption" id="costs-caption"></p>
+              <details class="details">
+                <summary>Ver la tabla de costes</summary>
+                <div id="table-costs"></div>
+              </details>
+            </article>
+            <aside class="card stack">
+              <div>
+                <p class="kicker">Lectura</p>
+                <p class="reading" id="reading-costs" style="border-top: 0; padding-top: 0; margin-top: 8px"></p>
+              </div>
+              <div class="mini-grid">
+                <div class="mini-card">
+                  <span class="label">Coste de producto</span>
+                  <strong class="value" id="cost-product">—</strong>
+                  <span class="meta" id="cost-product-meta">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Personal</span>
+                  <strong class="value" id="cost-personnel">—</strong>
+                  <span class="meta" id="cost-personnel-meta">—</span>
+                </div>
+              </div>
+              <p class="small muted" style="margin: 0">
+                El COGS es variable; el personal y el alquiler, no. Por eso una caída de demanda golpea el EBITDA.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="equilibrio">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">06 · Punto de equilibrio</span>
+              <h2>Cuántos tickets aguantan el local</h2>
+            </div>
+            <p>Dos umbrales: cubrir la operación (EBITDA) y cubrir también amortización e intereses (EBT).</p>
+          </div>
+
+          <div class="split">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Tickets/día previstos frente al equilibrio</h3>
+                  <p class="sub" id="break-even-sub">0 a 400 tickets/día.</p>
+                </div>
+              </div>
+              <div class="chart" id="chart-break-even"></div>
+              <p class="chart-caption" id="break-even-caption"></p>
+            </article>
+            <aside class="card stack">
+              <div class="mini-grid break-even-cards">
+                <div class="mini-card">
+                  <span class="label">BE EBITDA</span>
+                  <strong class="value" id="be-ebitda">—</strong>
+                  <span class="meta">tickets/día</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">BE total</span>
+                  <strong class="value" id="be-total">—</strong>
+                  <span class="meta">tickets/día</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Margen de seguridad</span>
+                  <strong class="value" id="be-safety">—</strong>
+                  <span class="meta">antes de pérdidas contables</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Contribución/ticket</span>
+                  <strong class="value" id="be-contribution">—</strong>
+                  <span class="meta">ingresos − COGS − marketing variable</span>
+                </div>
+              </div>
+              <p class="reading" id="reading-break-even"></p>
+              <p class="small muted" style="margin: 0">Costes fijos de caja: <span id="be-fixed">—</span>.</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="cuenta">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">07 · El modelo completo</span>
+              <h2>De la venta al beneficio</h2>
+            </div>
+            <p>La cuenta de resultados completa, anual o mes a mes. La misma que el libro Excel.</p>
+          </div>
+
+          <article class="card">
+            <div class="tabs" id="model-tabs" role="group" aria-label="Vista de la cuenta de resultados">
+              <button type="button" data-view="annual" aria-pressed="true">Anual</button>
+              <button type="button" data-view="monthly" aria-pressed="false">Mensual</button>
+            </div>
+            <div id="model-annual"></div>
+            <div id="model-monthly" hidden></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="laboratorio">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">08 · Laboratorio</span>
+              <h2>Mueve un supuesto y mira qué pasa.</h2>
+            </div>
+            <p>Diez controles sobre el escenario activo. No modifica el contrato: crea un caso sandbox y lo comparte por URL.</p>
+          </div>
+
+          <div class="lab-layout">
+            <article class="card lab-panel">
+              <div class="lab-head">
+                <div>
+                  <h3>Tus supuestos</h3>
+                  <p class="sub">Arrastra un control. El cálculo se actualiza en menos de 50 ms.</p>
+                </div>
+                <div class="lab-actions">
+                  <button class="button ghost" type="button" id="lab-reset">Restablecer</button>
+                  <button class="button" type="button" id="lab-copy">Copiar enlace</button>
+                </div>
+              </div>
+              <div id="lab-controls" class="lab-controls-grid"></div>
+            </article>
+
+            <aside class="card lab-results">
+              <div class="lab-results-head">
+                <span class="tag" id="lab-status">Escenario Base</span>
+                <p id="lab-reading" aria-live="polite">—</p>
+              </div>
+              <div class="lab-kpis">
+                <div class="mini-card">
+                  <span class="label">Ingresos 2028</span>
+                  <strong class="value" id="lab-revenue">—</strong>
+                  <span class="meta" id="lab-delta-revenue">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">EBITDA 2028</span>
+                  <strong class="value" id="lab-ebitda">—</strong>
+                  <span class="meta" id="lab-delta-ebitda">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Caja final 2028</span>
+                  <strong class="value" id="lab-cash">—</strong>
+                  <span class="meta" id="lab-delta-cash">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Payback proyecto</span>
+                  <strong class="value" id="lab-payback">—</strong>
+                  <span class="meta" id="lab-delta-payback">—</span>
+                </div>
+              </div>
+              <div class="lab-chart" id="chart-lab"></div>
+              <div class="callout warning" id="lab-callout" role="status" hidden></div>
+              <p class="small muted" style="margin: 0">
+                El delta compara con el escenario seleccionado. Los números no son promesas; si la caja baja de
+                10.000 €, el modelo te avisa.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="aprende">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">09 · Aprende</span>
+              <h2>La guía que explica el porqué</h2>
+            </div>
+            <p>Diez capítulos, 36 ejercicios con respuesta y una checklist para auditar tu propio modelo.</p>
+          </div>
+          <div class="learn-grid">
+            <a class="learn-card" href="./aprende.html#capitulo-2">
+              <span class="num">01</span>
+              <h3>Lee una cuenta de resultados</h3>
+              <p>De ingresos a beneficio neto, línea a línea, con las cifras de Aurora.</p>
+              <span class="arrow">Abrir el capítulo →</span>
+            </a>
+            <a class="learn-card" href="./aprende.html#capitulo-5">
+              <span class="num">02</span>
+              <h3>Calcula tu punto de equilibrio</h3>
+              <p>Cuántos tickets/día cubren costes fijos, amortización e intereses.</p>
+              <span class="arrow">Abrir el capítulo →</span>
+            </a>
+            <a class="learn-card" href="./aprende.html#capitulo-7">
+              <span class="num">03</span>
+              <h3>Separa beneficio y caja</h3>
+              <p>Por qué un negocio rentable puede quedarse sin liquidez.</p>
+              <span class="arrow">Abrir el capítulo →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="descarga">
+        <div class="wrap">
+          <div class="cta-band">
+            <div>
+              <p class="kicker" style="color: var(--gold)">El entregable completo</p>
+              <h2>Diez hojas. Cinco gráficos. Cero valores pegados.</h2>
+              <p>
+                Descarga el libro Excel con los tres escenarios, la cuenta de resultados mensual, el resumen
+                ejecutivo y la hoja Aprende. Cambia una celda amarilla y todo se recalcula.
+              </p>
+            </div>
+            <div class="stack">
+              <a class="button light" href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>
+                Descargar el modelo (Excel, 10 hojas)
+              </a>
+              <a class="button ghost" style="color: var(--cream); border-color: rgba(247,241,231,.3)" href="https://github.com/gerrcass/analisis-financiero-cafeteria">
+                Ver el repositorio
+              </a>
+            </div>
+          </div>
+          <p class="small muted" style="margin-top: 14px">
+            Metodología y fórmulas: <a href="https://github.com/gerrcass/analisis-financiero-cafeteria/blob/main/docs/project-brief.md">docs/project-brief.md</a>.
+            Modelo educativo; no es asesoramiento financiero, fiscal ni legal.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">
+              <img src="./assets/aurora-mark.svg" alt="" width="32" height="32">
+              <strong>Aurora</strong>
+            </div>
+            <p>Un modelo financiero reproducible de una cafetería de especialidad en Zaragoza. 36 meses, tres escenarios y una guía para aprender.</p>
+          </div>
+          <div>
+            <span class="footer-title">Explorar</span>
+            <ul>
+              <li><a href="#modelo">Modelo</a></li>
+              <li><a href="#escenarios">Escenarios</a></li>
+              <li><a href="#laboratorio">Laboratorio</a></li>
+              <li><a href="./aprende.html">Guía de finanzas</a></li>
+            </ul>
+          </div>
+          <div>
+            <span class="footer-title">Descargar</span>
+            <ul>
+              <li><a href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>Libro Excel</a></li>
+              <li><a href="https://github.com/gerrcass/analisis-financiero-cafeteria">Repositorio</a></li>
+              <li><a href="https://github.com/gerrcass/analisis-financiero-cafeteria/blob/main/docs/guia-finanzas.md">Guía en Markdown</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>Cafetería Aurora · modelo educativo · 2026–2028</span>
+          <span>Hecho con T3 Code · Supuestos ilustrativos, no una previsión de demanda.</span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <noscript>
+      <p style="padding: 24px">Este dashboard necesita JavaScript para calcular el modelo en tu navegador. El libro Excel sigue disponible para descargar.</p>
+    </noscript>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

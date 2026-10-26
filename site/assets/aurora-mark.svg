@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="aurora-mark-title">
+  <title id="aurora-mark-title">Aurora: sol naciente sobre una taza</title>
+  <g fill="none" stroke="#C4623B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 27a9 9 0 0 1 9 9H23a9 9 0 0 1 9-9Z"/>
+    <path d="M32 12v5M19.5 17.5l3.2 3.2M44.5 17.5l-3.2 3.2M15 27h4M45 27h4"/>
+    <path d="M18 36h28v5.5A9.5 9.5 0 0 1 36.5 51h-9A9.5 9.5 0 0 1 18 41.5V36Z"/>
+    <path d="M46 38h2.5a4.5 4.5 0 0 1 0 9H46"/>
+    <path d="M14 56h36"/>
+  </g>
+</svg>
