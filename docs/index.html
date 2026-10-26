@@ -458,16 +458,63 @@
 
       <section class="section" id="laboratorio">
         <div class="wrap">
-          <div class="lab-teaser">
+          <div class="section-head">
             <div>
-              <p class="kicker">08 · Laboratorio</p>
-              <h3>Mueve un supuesto y mira qué pasa.</h3>
-              <p>
-                El laboratorio completo, con diez controles, presets, reset y enlace compartible, se publica
-                junto a la guía de finanzas. Mientras tanto, el Excel permite probar cualquier supuesto.
-              </p>
+              <span class="section-index">08 · Laboratorio</span>
+              <h2>Mueve un supuesto y mira qué pasa.</h2>
             </div>
-            <a class="button ghost" href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>Descargar el modelo</a>
+            <p>Diez controles sobre el escenario activo. No modifica el contrato: crea un caso sandbox y lo comparte por URL.</p>
+          </div>
+
+          <div class="lab-layout">
+            <article class="card lab-panel">
+              <div class="lab-head">
+                <div>
+                  <h3>Tus supuestos</h3>
+                  <p class="sub">Arrastra un control. El cálculo se actualiza en menos de 50 ms.</p>
+                </div>
+                <div class="lab-actions">
+                  <button class="button ghost" type="button" id="lab-reset">Restablecer</button>
+                  <button class="button" type="button" id="lab-copy">Copiar enlace</button>
+                </div>
+              </div>
+              <div id="lab-controls" class="lab-controls-grid"></div>
+            </article>
+
+            <aside class="card lab-results">
+              <div class="lab-results-head">
+                <span class="tag" id="lab-status">Escenario Base</span>
+                <p id="lab-reading" aria-live="polite">—</p>
+              </div>
+              <div class="lab-kpis">
+                <div class="mini-card">
+                  <span class="label">Ingresos 2028</span>
+                  <strong class="value" id="lab-revenue">—</strong>
+                  <span class="meta" id="lab-delta-revenue">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">EBITDA 2028</span>
+                  <strong class="value" id="lab-ebitda">—</strong>
+                  <span class="meta" id="lab-delta-ebitda">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Caja final 2028</span>
+                  <strong class="value" id="lab-cash">—</strong>
+                  <span class="meta" id="lab-delta-cash">—</span>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Payback proyecto</span>
+                  <strong class="value" id="lab-payback">—</strong>
+                  <span class="meta" id="lab-delta-payback">—</span>
+                </div>
+              </div>
+              <div class="lab-chart" id="chart-lab"></div>
+              <div class="callout warning" id="lab-callout" role="status" hidden></div>
+              <p class="small muted" style="margin: 0">
+                El delta compara con el escenario seleccionado. Los números no son promesas; si la caja baja de
+                10.000 €, el modelo te avisa.
+              </p>
+            </aside>
           </div>
         </div>
       </section>

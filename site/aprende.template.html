@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aprende finanzas con Cafetería Aurora — guía de 10 capítulos</title>
+    <meta name="description" content="Guía de finanzas en español con las cifras reales de Cafetería Aurora: cuenta de resultados, COGS, punto de equilibrio, caja, deuda, escenarios y decisión. 36 ejercicios con respuesta.">
+    <link rel="canonical" href="https://gerrcass.github.io/analisis-financiero-cafeteria/aprende.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Aprende finanzas con Cafetería Aurora">
+    <meta property="og:description" content="10 capítulos, 36 ejercicios con respuesta y calculadoras para aprender finanzas con un caso real.">
+    <meta property="og:url" content="https://gerrcass.github.io/analisis-financiero-cafeteria/aprende.html">
+    <meta property="og:image" content="https://gerrcass.github.io/analisis-financiero-cafeteria/assets/og-image.png">
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body class="guide-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="./index.html" aria-label="Cafetería Aurora, inicio">
+          <img src="./assets/aurora-mark.svg" alt="" width="34" height="34">
+          <span class="brand-word"><strong>Aurora</strong><span>café de especialidad</span></span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">Abrir menú</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Principal">
+          <a href="./index.html#modelo">Modelo</a>
+          <a href="./index.html#escenarios">Escenarios</a>
+          <a href="./index.html#laboratorio">Laboratorio</a>
+          <a href="./aprende.html" aria-current="page">Aprende</a>
+          <a class="header-cta" href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>Descargar Excel</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="hero guide-hero">
+        <div class="wrap hero-copy">
+          <p class="eyebrow">Guía de finanzas · Cafetería Aurora</p>
+          <h1>Aprende finanzas <em>con un café.</em></h1>
+          <p class="hero-sub">
+            Diez capítulos que recorren la cadena de ticket a caja con las cifras reales de Aurora.
+            Sin jerga sin explicar y sin promesas: cada fórmula se puede reproducir en el modelo.
+          </p>
+          <div class="hero-note">
+            <span>10 capítulos</span>
+            <span>36 ejercicios con respuesta</span>
+            <span>Glosario y checklist</span>
+            <span>Taller de 90 minutos</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section calculators" id="calculadoras">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">Calculadoras</span>
+              <h2>Tres fórmulas para tocar</h2>
+            </div>
+            <p>Los valores iniciales son el escenario Base 2026. Cambia un número y observa la fórmula aplicada.</p>
+          </div>
+          <div class="calculator-grid">
+            <article class="calc-card">
+              <h3>De tickets a ingresos</h3>
+              <p class="small muted">Tickets/día × días × ítems/ticket × precio neto.</p>
+              <div class="calc-fields">
+                <label for="calc-ticket-tickets">Tickets/día</label>
+                <input id="calc-ticket-tickets" type="number" min="0" step="0.1" value="341.9">
+                <label for="calc-ticket-items">Ítems/ticket</label>
+                <input id="calc-ticket-items" type="number" min="1" step="0.01" value="1.35">
+                <label for="calc-ticket-price">Precio neto (€)</label>
+                <input id="calc-ticket-price" type="number" min="0" step="0.0001" value="2.6691">
+                <label for="calc-ticket-days">Días operativos</label>
+                <input id="calc-ticket-days" type="number" min="1" step="1" value="312">
+              </div>
+              <p class="calc-output" aria-live="polite">Ingresos: <strong id="calc-ticket-output">—</strong></p>
+            </article>
+
+            <article class="calc-card">
+              <h3>Punto de equilibrio</h3>
+              <p class="small muted">Costes fijos / contribución por ticket / días.</p>
+              <div class="calc-fields">
+                <label for="calc-be-fixed">Costes fijos (€)</label>
+                <input id="calc-be-fixed" type="number" min="0" step="1" value="178620">
+                <label for="calc-be-contribution">Contribución/ticket (€)</label>
+                <input id="calc-be-contribution" type="number" min="0.01" step="0.01" value="2.2522">
+                <label for="calc-be-days">Días operativos</label>
+                <input id="calc-be-days" type="number" min="1" step="1" value="312">
+              </div>
+              <p class="calc-output" aria-live="polite">Equilibrio: <strong id="calc-be-output">—</strong></p>
+            </article>
+
+            <article class="calc-card">
+              <h3>De EBITDA a caja</h3>
+              <p class="small muted">EBITDA − impuesto − capex − ΔWC − intereses + escudo − principal.</p>
+              <div class="calc-fields calc-fields-2">
+                <label for="calc-cash-ebitda">EBITDA (€)</label>
+                <input id="calc-cash-ebitda" type="number" step="1" value="61658">
+                <label for="calc-cash-tax">Impuesto sin deuda (€)</label>
+                <input id="calc-cash-tax" type="number" step="1" value="11258">
+                <label for="calc-cash-capex">Capex mantenimiento (€)</label>
+                <input id="calc-cash-capex" type="number" step="1" value="5766">
+                <label for="calc-cash-wc">Δ capital circulante (€)</label>
+                <input id="calc-cash-wc" type="number" step="1" value="-6944">
+                <label for="calc-cash-interest">Intereses (€)</label>
+                <input id="calc-cash-interest" type="number" step="1" value="4843">
+                <label for="calc-cash-shield">Escudo fiscal (€)</label>
+                <input id="calc-cash-shield" type="number" step="1" value="1211">
+                <label for="calc-cash-principal">Principal (€)</label>
+                <input id="calc-cash-principal" type="number" step="1" value="11988">
+              </div>
+              <p class="calc-output" aria-live="polite">FCFE: <strong id="calc-cash-output">—</strong></p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap guide-layout">
+        <aside class="guide-aside">
+          <div class="guide-toc">
+            <span class="footer-title" style="color: var(--terracotta-strong)">En esta guía</span>
+            {{TOC}}
+          </div>
+          <div class="guide-aside-cta">
+            <p class="small muted">El modelo completo, con fórmulas vivas y los tres escenarios.</p>
+            <a class="button" href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>Descargar el Excel</a>
+            <a class="button ghost" href="./index.html">Volver al dashboard</a>
+          </div>
+        </aside>
+        <article class="guide-content" id="guia">
+          {{CONTENT}}
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-bottom" style="margin-top: 0; border-top: 0; padding-top: 0">
+          <span>Cafetería Aurora · guía educativa · 2026–2028</span>
+          <span>No es asesoramiento financiero, fiscal ni legal.</span>
+        </div>
+      </div>
+    </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./js/guide.js"></script>
+  </body>
+</html>

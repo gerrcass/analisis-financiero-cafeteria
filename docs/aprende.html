@@ -3,13 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aprende con Cafetería Aurora — guía de finanzas</title>
-    <meta name="description" content="Guía de finanzas en español con las cifras reales de Cafetería Aurora: 10 capítulos, 36 ejercicios y una checklist de validación.">
+    <title>Aprende finanzas con Cafetería Aurora — guía de 10 capítulos</title>
+    <meta name="description" content="Guía de finanzas en español con las cifras reales de Cafetería Aurora: cuenta de resultados, COGS, punto de equilibrio, caja, deuda, escenarios y decisión. 36 ejercicios con respuesta.">
     <link rel="canonical" href="https://gerrcass.github.io/analisis-financiero-cafeteria/aprende.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Aprende finanzas con Cafetería Aurora">
+    <meta property="og:description" content="10 capítulos, 36 ejercicios con respuesta y calculadoras para aprender finanzas con un caso real.">
+    <meta property="og:url" content="https://gerrcass.github.io/analisis-financiero-cafeteria/aprende.html">
+    <meta property="og:image" content="https://gerrcass.github.io/analisis-financiero-cafeteria/assets/og-image.png">
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="./css/styles.css">
   </head>
-  <body>
+  <body class="guide-page">
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <header class="site-header">
       <div class="wrap header-inner">
@@ -17,7 +22,11 @@
           <img src="./assets/aurora-mark.svg" alt="" width="34" height="34">
           <span class="brand-word"><strong>Aurora</strong><span>café de especialidad</span></span>
         </a>
-        <nav class="site-nav" aria-label="Principal">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">Abrir menú</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Principal">
           <a href="./index.html#modelo">Modelo</a>
           <a href="./index.html#escenarios">Escenarios</a>
           <a href="./index.html#laboratorio">Laboratorio</a>
@@ -26,26 +35,1314 @@
         </nav>
       </div>
     </header>
+
     <main id="contenido">
-      <section class="hero">
+      <section class="hero guide-hero">
         <div class="wrap hero-copy">
           <p class="eyebrow">Guía de finanzas · Cafetería Aurora</p>
-          <h1>La guía completa <em>llega con el siguiente capítulo.</em></h1>
+          <h1>Aprende finanzas <em>con un café.</em></h1>
           <p class="hero-sub">
-            Los diez capítulos, los 36 ejercicios con respuesta y la checklist de validación se publican
-            junto al laboratorio de supuestos. Mientras tanto, el dashboard y el Excel ya están disponibles.
+            Diez capítulos que recorren la cadena de ticket a caja con las cifras reales de Aurora.
+            Sin jerga sin explicar y sin promesas: cada fórmula se puede reproducir en el modelo.
           </p>
-          <p style="margin-top: 28px">
-            <a class="button" href="./index.html">Volver al dashboard</a>
-          </p>
+          <div class="hero-note">
+            <span>10 capítulos</span>
+            <span>36 ejercicios con respuesta</span>
+            <span>Glosario y checklist</span>
+            <span>Taller de 90 minutos</span>
+          </div>
         </div>
       </section>
+
+      <section class="section calculators" id="calculadoras">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <span class="section-index">Calculadoras</span>
+              <h2>Tres fórmulas para tocar</h2>
+            </div>
+            <p>Los valores iniciales son el escenario Base 2026. Cambia un número y observa la fórmula aplicada.</p>
+          </div>
+          <div class="calculator-grid">
+            <article class="calc-card">
+              <h3>De tickets a ingresos</h3>
+              <p class="small muted">Tickets/día × días × ítems/ticket × precio neto.</p>
+              <div class="calc-fields">
+                <label for="calc-ticket-tickets">Tickets/día</label>
+                <input id="calc-ticket-tickets" type="number" min="0" step="0.1" value="341.9">
+                <label for="calc-ticket-items">Ítems/ticket</label>
+                <input id="calc-ticket-items" type="number" min="1" step="0.01" value="1.35">
+                <label for="calc-ticket-price">Precio neto (€)</label>
+                <input id="calc-ticket-price" type="number" min="0" step="0.0001" value="2.6691">
+                <label for="calc-ticket-days">Días operativos</label>
+                <input id="calc-ticket-days" type="number" min="1" step="1" value="312">
+              </div>
+              <p class="calc-output" aria-live="polite">Ingresos: <strong id="calc-ticket-output">—</strong></p>
+            </article>
+
+            <article class="calc-card">
+              <h3>Punto de equilibrio</h3>
+              <p class="small muted">Costes fijos / contribución por ticket / días.</p>
+              <div class="calc-fields">
+                <label for="calc-be-fixed">Costes fijos (€)</label>
+                <input id="calc-be-fixed" type="number" min="0" step="1" value="178620">
+                <label for="calc-be-contribution">Contribución/ticket (€)</label>
+                <input id="calc-be-contribution" type="number" min="0.01" step="0.01" value="2.2522">
+                <label for="calc-be-days">Días operativos</label>
+                <input id="calc-be-days" type="number" min="1" step="1" value="312">
+              </div>
+              <p class="calc-output" aria-live="polite">Equilibrio: <strong id="calc-be-output">—</strong></p>
+            </article>
+
+            <article class="calc-card">
+              <h3>De EBITDA a caja</h3>
+              <p class="small muted">EBITDA − impuesto − capex − ΔWC − intereses + escudo − principal.</p>
+              <div class="calc-fields calc-fields-2">
+                <label for="calc-cash-ebitda">EBITDA (€)</label>
+                <input id="calc-cash-ebitda" type="number" step="1" value="61658">
+                <label for="calc-cash-tax">Impuesto sin deuda (€)</label>
+                <input id="calc-cash-tax" type="number" step="1" value="11258">
+                <label for="calc-cash-capex">Capex mantenimiento (€)</label>
+                <input id="calc-cash-capex" type="number" step="1" value="5766">
+                <label for="calc-cash-wc">Δ capital circulante (€)</label>
+                <input id="calc-cash-wc" type="number" step="1" value="-6944">
+                <label for="calc-cash-interest">Intereses (€)</label>
+                <input id="calc-cash-interest" type="number" step="1" value="4843">
+                <label for="calc-cash-shield">Escudo fiscal (€)</label>
+                <input id="calc-cash-shield" type="number" step="1" value="1211">
+                <label for="calc-cash-principal">Principal (€)</label>
+                <input id="calc-cash-principal" type="number" step="1" value="11988">
+              </div>
+              <p class="calc-output" aria-live="polite">FCFE: <strong id="calc-cash-output">—</strong></p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap guide-layout">
+        <aside class="guide-aside">
+          <div class="guide-toc">
+            <span class="footer-title" style="color: var(--terracotta-strong)">En esta guía</span>
+            <ul>
+<li><a href="#las-tres-preguntas-de-una-inversion">Las tres preguntas de una inversión</a></li>
+<li><a href="#mapa-de-la-guia">Mapa de la guía</a></li>
+<li><a href="#capitulo-1">Capítulo 1 — Qué es un modelo financiero y cómo leer Aurora</a></li>
+<li><a href="#capitulo-2">Capítulo 2 — La cuenta de resultados</a></li>
+<li><a href="#capitulo-3">Capítulo 3 — Ingresos, tickets y estacionalidad</a></li>
+<li><a href="#capitulo-4">Capítulo 4 — COGS, merma y margen bruto</a></li>
+<li><a href="#capitulo-5">Capítulo 5 — Costes fijos, apalancamiento y punto de equilibrio</a></li>
+<li><a href="#capitulo-6">Capítulo 6 — Personal y productividad</a></li>
+<li><a href="#capitulo-7">Capítulo 7 — De EBITDA a caja</a></li>
+<li><a href="#capitulo-8">Capítulo 8 — Deuda, intereses y DSCR</a></li>
+<li><a href="#capitulo-9">Capítulo 9 — Escenarios y sensibilidad</a></li>
+<li><a href="#capitulo-10">Capítulo 10 — Decidir con el modelo</a></li>
+<li><a href="#calculadoras-de-bolsillo">Calculadoras de bolsillo</a></li>
+<li><a href="#glosario">Glosario mínimo</a></li>
+<li><a href="#checklist">Checklist de validación</a></li>
+<li><a href="#taller">Notas para un taller de 90 minutos</a></li>
+<li><a href="#respuestas-consolidadas">Respuestas consolidadas</a></li>
+<li><a href="#aviso">Aviso</a></li>
+</ul>
+          </div>
+          <div class="guide-aside-cta">
+            <p class="small muted">El modelo completo, con fórmulas vivas y los tres escenarios.</p>
+            <a class="button" href="./assets/Cafeteria-Aurora-Modelo-Financiero.xlsx" download>Descargar el Excel</a>
+            <a class="button ghost" href="./index.html">Volver al dashboard</a>
+          </div>
+        </aside>
+        <article class="guide-content" id="guia">
+          <blockquote>
+<p><strong>Para quién</strong>: alguien que quiere entender finanzas de negocio desde cero, con un caso real y números que puede tocar.<br />
+<strong>Qué vas a aprender</strong>: a leer una cuenta de resultados, separar costes fijos y variables, calcular un punto de equilibrio, reconciliar beneficio y caja, entender una deuda y decidir con escenarios.<br />
+<strong>Cómo se usa</strong>: lee un capítulo, mira el ejemplo con el escenario Base, haz los ejercicios y comprueba la respuesta. Después abre el laboratorio del sitio y cambia un supuesto para ver qué pasa.</p>
+</blockquote>
+<p>Este documento es la <strong>fuente canónica</strong> de la guía. El sitio (<code>aprende.html</code>) lo publica con índice, calculadoras interactivas y los mismos estilos del dashboard; la hoja <code>Aprende</code> del Excel ofrece un resumen con ejemplos vivos. Todas las cifras siguientes son del escenario <strong>Base</strong> y del modelo congelado en <code>docs/project-brief.md</code>; si cambias un supuesto, los números cambiarán y el modelo se recalculará.</p>
+<blockquote>
+<p><strong>Cómo usar la guía</strong>: lee el capítulo, mira el ejemplo con las cifras de Aurora, intenta el ejercicio sin mirar la respuesta y compruébala. Después abre el dashboard, cambia de escenario y mueve el laboratorio. La guía no es un libro de texto abstracto: cada fórmula se puede reproducir con el modelo.</p>
+<p><strong>Requisito de honestidad</strong>: la demanda de 360 tickets/día es el supuesto menos evidenciado. El modelo sirve para ordenar decisiones, no para demostrar que el local funcionará. Antes de invertir, cuenta clientes durante dos semanas y pide tres presupuestos de capex.</p>
+</blockquote>
+<h2 id="las-tres-preguntas-de-una-inversion">Las tres preguntas de una inversión</h2>
+<p>Antes de comprometer 160.000 €, la fundadora necesita responder:</p>
+<ol>
+<li><strong>¿Cuánto puedo vender?</strong> 360 tickets/día en régimen, 1,35 ítems por ticket y un ticket medio neto de 3,60 € en 2026. La rampa y la estacionalidad hacen que la media del primer año sea 342 tickets/día, no 360.</li>
+<li><strong>¿Cuánto cuesta operar?</strong> 132.608 € de COGS, 110.460 € de personal y 79.693 € de opex en 2026. El EBITDA resultante es 61.658 € (16,0 % de los ingresos).</li>
+<li><strong>¿Cuándo recupero la inversión?</strong> El proyecto (138.500 € de capex más circulante) tarda 34 meses en Base; el equity (90.000 €) tarda 30. En Pesimista, ninguno de los dos se recupera en 36 meses.</li>
+</ol>
+<p>La guía recorre esa cadena en diez capítulos. Cada uno termina con ejercicios y respuestas razonadas.</p>
+<h2 id="mapa-de-la-guia">Mapa de la guía</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Capítulo</th>
+<th>Pregunta que responde</th>
+<th>Ejercicios</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Qué es un modelo financiero</td>
+<td>¿Qué estoy mirando y qué no?</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>La cuenta de resultados</td>
+<td>¿De dónde sale el beneficio?</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Ingresos, tickets y estacionalidad</td>
+<td>¿Cómo se genera la venta?</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>COGS, merma y margen bruto</td>
+<td>¿Cuánto cuesta lo que vendo?</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Costes fijos y punto de equilibrio</td>
+<td>¿Cuánto tengo que vender para no perder?</td>
+<td>4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Personal y productividad</td>
+<td>¿Cuánto cuesta el equipo?</td>
+<td>3</td>
+</tr>
+<tr>
+<td>7</td>
+<td>De EBITDA a caja</td>
+<td>¿Por qué el beneficio no es la caja?</td>
+<td>4</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Deuda, intereses y DSCR</td>
+<td>¿Puedo pagar el préstamo?</td>
+<td>3</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Escenarios y sensibilidad</td>
+<td>¿Qué pasa si me equivoco?</td>
+<td>4</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Decidir con el modelo</td>
+<td>¿Invierto o no?</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Convención de cifras</strong>: euros sin IVA salvo que se indique "con IVA"; porcentajes con un decimal; tickets/día con un decimal. Las diferencias de ±1 € son de redondeo.</p>
+<hr />
+<h2 id="capitulo-1">Capítulo 1 — Qué es un modelo financiero y cómo leer Aurora</h2>
+<h3 id="objetivo">Objetivo</h3>
+<p>Entender que un modelo financiero no es una bola de cristal: es un <strong>mapa de decisiones</strong> que conecta supuestos con consecuencias.</p>
+<h3 id="conceptos-clave">Conceptos clave</h3>
+<ul>
+<li><strong>Supuesto</strong>: lo que eliges porque no lo sabes (demanda, precio, merma).</li>
+<li><strong>Dato</strong>: lo que observas o contratas (alquiler, cuota del préstamo, IVA).</li>
+<li><strong>Fórmula</strong>: la relación entre ambos; en Aurora, casi todo se calcula.</li>
+<li><strong>Escenario</strong>: una combinación coherente de supuestos, no una predicción.</li>
+<li><strong>Tres vistas</strong>: cuenta de resultados (¿gano?), caja (¿tengo dinero?) y deuda (¿puedo pagar?).</li>
+</ul>
+<h3 id="la-cadena-del-modelo">La cadena del modelo</h3>
+<pre><code>Supuestos → Tickets → Ingresos → COGS → Margen bruto
+          → Personal + Opex → EBITDA → Amortización → EBIT
+          → Intereses → EBT → Impuestos → Beneficio neto
+          → Capital circulante + Capex + Deuda → Caja final
+</code></pre>
+<h3 id="ejemplo-con-aurora-base-2026">Ejemplo con Aurora (Base, 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align: right;">Valor</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingresos netos</td>
+<td style="text-align: right;">384.419 €</td>
+<td>Lo que factura el local, sin IVA</td>
+</tr>
+<tr>
+<td>EBITDA</td>
+<td style="text-align: right;">61.658 €</td>
+<td>Caja operativa antes de inversión, intereses e impuestos</td>
+</tr>
+<tr>
+<td>Beneficio neto</td>
+<td style="text-align: right;">30.142 €</td>
+<td>Lo que queda después de amortizar, pagar intereses e impuestos</td>
+</tr>
+<tr>
+<td>Caja final</td>
+<td style="text-align: right;">57.456 €</td>
+<td>Dinero disponible al cerrar 2026</td>
+</tr>
+</tbody>
+</table>
+<p>Los cuatro números son distintos y los cuatro son correctos. Si solo miras ingresos, no sabes si el negocio gana; si solo miras beneficio, no sabes si hay caja; si solo miras caja, no sabes si el negocio es rentable.</p>
+<h3 id="error-comun">Error común</h3>
+<p>Creer que "modelo financiero" es sinónimo de "previsión de ventas". La previsión es una parte; el valor está en conectar esa previsión con costes, caja y deuda.</p>
+<h3 id="ejercicios">Ejercicios</h3>
+<ol>
+<li>¿Cuál de las cuatro cifras del ejemplo es una medida de caja operativa?</li>
+<li>¿Por qué el beneficio neto es menor que el EBITDA?</li>
+<li>¿Qué diferencia hay entre un escenario y una predicción?</li>
+</ol>
+<h3 id="respuestas">Respuestas</h3>
+<ol>
+<li>El EBITDA (61.658 €). No es caja libre todavía: faltan impuestos, inversión y capital circulante.</li>
+<li>Porque al EBITDA se le restan la amortización (16.625 €), los intereses (4.843 €) y los impuestos (10.047 €): 61.658 − 16.625 − 4.843 − 10.047 = 30.143 € (redondeo).</li>
+<li>Un escenario es una hipótesis coherente que se puede comparar con otras; una predicción afirma lo que va a pasar. Aurora no predice: prueba.</li>
+</ol>
+<hr />
+<h2 id="capitulo-2">Capítulo 2 — La cuenta de resultados</h2>
+<h3 id="objetivo_1">Objetivo</h3>
+<p>Leer una cuenta de resultados de arriba abajo y saber qué decisión toca en cada línea.</p>
+<h3 id="conceptos-clave_1">Conceptos clave</h3>
+<ul>
+<li><strong>Ingresos netos</strong>: PVP menos IVA. Es el dinero que se reconoce como ingreso.</li>
+<li><strong>COGS</strong>: coste de los productos vendidos (café, leche, panadería, packaging, merma).</li>
+<li><strong>Margen bruto</strong>: ingresos − COGS. Es lo que queda para pagar la estructura.</li>
+<li><strong>Opex</strong>: alquiler, suministros, servicios, marketing y otros gastos.</li>
+<li><strong>EBITDA</strong>: margen bruto − personal − opex. Mide la caja operativa antes de inversión y financiación.</li>
+<li><strong>Amortización</strong>: reparto del capex; no es caja del periodo.</li>
+<li><strong>EBIT</strong>: EBITDA − amortización.</li>
+<li><strong>Intereses</strong>: coste de la deuda.</li>
+<li><strong>EBT</strong>: EBIT − intereses.</li>
+<li><strong>Impuestos</strong>: 25% de la base imponible positiva.</li>
+<li><strong>Beneficio neto</strong>: EBT − impuestos.</li>
+</ul>
+<h3 id="formulas">Fórmulas</h3>
+<pre><code>Margen bruto = Ingresos netos − COGS
+EBITDA = Margen bruto − Personal − Alquiler − Suministros − Servicios
+         − Marketing fijo − Marketing variable − Otros gastos
+EBIT = EBITDA − Amortización
+EBT = EBIT − Intereses
+Beneficio neto = EBT − Impuesto de sociedades
+</code></pre>
+<h3 id="ejemplo-con-aurora-base-2026_1">Ejemplo con Aurora (Base, 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>Línea</th>
+<th style="text-align: right;">Importe</th>
+<th style="text-align: right;">% ingresos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingresos netos</td>
+<td style="text-align: right;">384.419 €</td>
+<td style="text-align: right;">100,0%</td>
+</tr>
+<tr>
+<td>COGS</td>
+<td style="text-align: right;">132.608 €</td>
+<td style="text-align: right;">34,5%</td>
+</tr>
+<tr>
+<td><strong>Margen bruto</strong></td>
+<td style="text-align: right;"><strong>251.810 €</strong></td>
+<td style="text-align: right;"><strong>65,5%</strong></td>
+</tr>
+<tr>
+<td>Personal</td>
+<td style="text-align: right;">110.460 €</td>
+<td style="text-align: right;">28,7%</td>
+</tr>
+<tr>
+<td>Alquiler</td>
+<td style="text-align: right;">22.800 €</td>
+<td style="text-align: right;">5,9%</td>
+</tr>
+<tr>
+<td>Suministros</td>
+<td style="text-align: right;">17.400 €</td>
+<td style="text-align: right;">4,5%</td>
+</tr>
+<tr>
+<td>Servicios fijos</td>
+<td style="text-align: right;">9.360 €</td>
+<td style="text-align: right;">2,4%</td>
+</tr>
+<tr>
+<td>Marketing fijo</td>
+<td style="text-align: right;">5.400 €</td>
+<td style="text-align: right;">1,4%</td>
+</tr>
+<tr>
+<td>Marketing variable</td>
+<td style="text-align: right;">11.533 €</td>
+<td style="text-align: right;">3,0%</td>
+</tr>
+<tr>
+<td>Otros gastos</td>
+<td style="text-align: right;">13.200 €</td>
+<td style="text-align: right;">3,4%</td>
+</tr>
+<tr>
+<td><strong>Total opex + personal</strong></td>
+<td style="text-align: right;"><strong>190.153 €</strong></td>
+<td style="text-align: right;"><strong>49,5%</strong></td>
+</tr>
+<tr>
+<td><strong>EBITDA</strong></td>
+<td style="text-align: right;"><strong>61.658 €</strong></td>
+<td style="text-align: right;"><strong>16,0%</strong></td>
+</tr>
+<tr>
+<td>Amortización</td>
+<td style="text-align: right;">16.625 €</td>
+<td style="text-align: right;">4,3%</td>
+</tr>
+<tr>
+<td><strong>EBIT</strong></td>
+<td style="text-align: right;"><strong>45.033 €</strong></td>
+<td style="text-align: right;"><strong>11,7%</strong></td>
+</tr>
+<tr>
+<td>Intereses</td>
+<td style="text-align: right;">4.843 €</td>
+<td style="text-align: right;">1,3%</td>
+</tr>
+<tr>
+<td><strong>EBT</strong></td>
+<td style="text-align: right;"><strong>40.189 €</strong></td>
+<td style="text-align: right;"><strong>10,5%</strong></td>
+</tr>
+<tr>
+<td>Impuestos (25%)</td>
+<td style="text-align: right;">10.047 €</td>
+<td style="text-align: right;">2,6%</td>
+</tr>
+<tr>
+<td><strong>Beneficio neto</strong></td>
+<td style="text-align: right;"><strong>30.142 €</strong></td>
+<td style="text-align: right;"><strong>7,8%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Lectura: de cada 100 € que entran, 34,50 € se van en producto, 28,70 € en personal, 5,90 € en alquiler y 16,00 € quedan como EBITDA. De esos 16 €, la amortización se lleva 4,30 €, los intereses 1,30 € y Hacienda 2,60 €; al final quedan 7,80 € de beneficio neto.</p>
+<h3 id="error-comun_1">Error común</h3>
+<p>Restar el capex del EBITDA. El capex no es un gasto del periodo: se activa y se amortiza. Si compras una máquina de 28.000 €, no reduces el EBITDA de ese año; reduces la caja y, con el tiempo, el beneficio vía amortización.</p>
+<h3 id="ejercicios_1">Ejercicios</h3>
+<ol>
+<li>Calcula el margen bruto porcentual y el margen EBITDA porcentual.</li>
+<li>Si el personal sube un 5% y todo lo demás no cambia, ¿cuál es el nuevo EBITDA y el nuevo beneficio neto?</li>
+<li>¿Qué línea de la cuenta de resultados no es una salida de caja del periodo?</li>
+<li>Si el alquiler sube un 10%, ¿cuánto baja el beneficio neto?</li>
+</ol>
+<h3 id="respuestas_1">Respuestas</h3>
+<ol>
+<li>Margen bruto = 251.810 / 384.419 = 65,5%. Margen EBITDA = 61.658 / 384.419 = 16,0%.</li>
+<li>Personal +5% = +5.523 €; EBITDA = 56.135 €; EBT = 34.666 €; impuesto = 8.667 €; beneficio neto = 26.000 € (redondeo).</li>
+<li>La amortización (16.625 €). Es un gasto contable que reparte una inversión pasada; la salida de caja fue el capex.</li>
+<li>Alquiler +10% = +2.280 €; EBT baja a 37.909 €; impuesto 9.477 €; beneficio neto 28.432 €; caída de 1.710 €.</li>
+</ol>
+<hr />
+<h2 id="capitulo-3">Capítulo 3 — Ingresos, tickets y estacionalidad</h2>
+<h3 id="objetivo_2">Objetivo</h3>
+<p>Entender de dónde sale cada euro de venta y por qué un año no se reparte igual entre los meses.</p>
+<h3 id="conceptos-clave_2">Conceptos clave</h3>
+<ul>
+<li><strong>Tickets/día</strong>: clientes que compran al día. En Aurora, 360 en régimen; la media de 2026 es 342 por la rampa.</li>
+<li><strong>Ítems por ticket</strong>: 1,35. Un cliente puede llevarse un café y un croissant.</li>
+<li><strong>Mix</strong>: reparto de unidades entre los 8 productos.</li>
+<li><strong>PVP vs precio neto</strong>: el PVP incluye 10% de IVA; el modelo usa el neto.</li>
+<li><strong>Estacionalidad</strong>: factores mensuales que suman 12. Agosto 0,72; diciembre 1,16.</li>
+<li><strong>Rampa</strong>: 75% en enero, 82% en febrero, 88% en marzo, 93% en abril, 97% en mayo, 100% desde junio.</li>
+</ul>
+<h3 id="formula">Fórmula</h3>
+<pre><code>Tickets/día(t) = 360 × factor_escenario × (1+crecimiento)^(año−1)
+                 × estacionalidad(mes) × rampa(mes)
+Tickets(t) = tickets/día × días_operativos(mes)
+Ítems(t) = tickets × 1,35
+Ingresos(t) = ítems × Σ(mix_i × PVP_i/(1+IVA_i)) × (1+precio)^(año−1)
+</code></pre>
+<h3 id="ejemplo-con-aurora-base-2026_2">Ejemplo con Aurora (Base, 2026)</h3>
+<ul>
+<li>Tickets/día medio: 342,0 (360 × rampa media 0,946 × ajuste de días).</li>
+<li>Tickets del año: 106.686.</li>
+<li>Ítems: 144.026.</li>
+<li>Precio neto ponderado: 2,6691 €.</li>
+<li>Ticket medio neto: 3,60 €; con IVA: 3,96 €.</li>
+<li>Ingresos: 106.686 × 1,35 × 2,6691 = 384.419 €.</li>
+</ul>
+<p>Comparación mensual:</p>
+<table>
+<thead>
+<tr>
+<th>Mes</th>
+<th style="text-align: right;">Tickets/día</th>
+<th style="text-align: right;">Ingresos</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enero</td>
+<td style="text-align: right;">248,4</td>
+<td style="text-align: right;">24.166 €</td>
+<td>Rampa 75% + estacionalidad 0,92</td>
+</tr>
+<tr>
+<td>Febrero</td>
+<td style="text-align: right;">274,5</td>
+<td style="text-align: right;">23.741 €</td>
+<td>Rampa 82% + mes corto (24 días)</td>
+</tr>
+<tr>
+<td>Agosto</td>
+<td style="text-align: right;">259,2</td>
+<td style="text-align: right;">22.415 €</td>
+<td>Estacionalidad 0,72 (vacaciones)</td>
+</tr>
+<tr>
+<td>Diciembre</td>
+<td style="text-align: right;">417,6</td>
+<td style="text-align: right;">39.123 €</td>
+<td>Estacionalidad 1,16 + rampa 100%</td>
+</tr>
+</tbody>
+</table>
+<p>El mismo local, con el mismo precio, factura un 62% más en diciembre que en enero. Eso no es un error: es estacionalidad y rampa.</p>
+<h3 id="error-comun_2">Error común</h3>
+<p>Multiplicar tickets por el PVP medio con IVA. Si usas 3,96 € en vez de 3,60 €, inflas los ingresos un 10% y todo el modelo queda desviado. Otro error: usar la media anual para decidir la caja de enero; en enero el EBITDA es casi cero y en febrero negativo.</p>
+<h3 id="ejercicios_2">Ejercicios</h3>
+<ol>
+<li>Si los tickets/día suben un 10%, ¿cuánto suben los ingresos de 2026?</li>
+<li>Si el precio sube un 5% y la demanda no cambia, ¿cuánto suben los ingresos?</li>
+<li>Si suben ambos (demanda +10% y precio +5%), ¿cuál es el ingreso aproximado?</li>
+<li>¿Por qué diciembre factura más que enero si el local es el mismo?</li>
+</ol>
+<h3 id="respuestas_2">Respuestas</h3>
+<ol>
+<li>+10% de tickets = +10% de ítems e ingresos: 384.419 × 1,10 = 422.861 € (+38.442 €).</li>
+<li>384.419 × 1,05 = 403.640 € (+19.221 €).</li>
+<li>384.419 × 1,10 × 1,05 = 444.004 € (+59.585 €).</li>
+<li>Por la estacionalidad (1,16 vs 0,92) y porque en enero la rampa es del 75%; además diciembre tiene más días operativos que febrero.</li>
+</ol>
+<hr />
+<h2 id="capitulo-4">Capítulo 4 — COGS, merma y margen bruto</h2>
+<h3 id="objetivo_3">Objetivo</h3>
+<p>Saber cuánto cuesta realmente lo que se vende y cómo la merma y la inflación erosionan el margen.</p>
+<h3 id="conceptos-clave_3">Conceptos clave</h3>
+<ul>
+<li><strong>Coste unitario</strong>: lo que pagas al proveedor por unidad.</li>
+<li><strong>Merma</strong>: parte que no se vende; se aplica al coste.</li>
+<li><strong>Coste ajustado</strong>: coste / (1 − merma).</li>
+<li><strong>Inflación de costes</strong>: se aplica una vez al año, desde 2027.</li>
+<li><strong>Mix</strong>: cambiar el reparto de productos cambia el margen aunque las ventas no cambien.</li>
+</ul>
+<h3 id="formula_1">Fórmula</h3>
+<pre><code>Coste ajustado_i = coste_i / (1 − merma_i)
+COGS(t) = ítems × Σ(mix_i × coste_ajustado_i) × (1+inflación)^(año−1)
+Margen bruto = ingresos − COGS
+Margen bruto % = margen bruto / ingresos
+</code></pre>
+<h3 id="ejemplo-con-aurora-base-2026_3">Ejemplo con Aurora (Base, 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th style="text-align: right;">PVP</th>
+<th style="text-align: right;">Precio neto</th>
+<th style="text-align: right;">Coste</th>
+<th style="text-align: right;">Merma</th>
+<th style="text-align: right;">Coste ajustado</th>
+<th style="text-align: right;">Margen unitario</th>
+<th style="text-align: right;">Margen %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espresso</td>
+<td style="text-align: right;">1,70 €</td>
+<td style="text-align: right;">1,5455 €</td>
+<td style="text-align: right;">0,42 €</td>
+<td style="text-align: right;">4%</td>
+<td style="text-align: right;">0,4375 €</td>
+<td style="text-align: right;">1,1080 €</td>
+<td style="text-align: right;">71,7%</td>
+</tr>
+<tr>
+<td>Flat white</td>
+<td style="text-align: right;">2,80 €</td>
+<td style="text-align: right;">2,5455 €</td>
+<td style="text-align: right;">0,72 €</td>
+<td style="text-align: right;">4%</td>
+<td style="text-align: right;">0,7500 €</td>
+<td style="text-align: right;">1,7955 €</td>
+<td style="text-align: right;">70,5%</td>
+</tr>
+<tr>
+<td>Cappuccino</td>
+<td style="text-align: right;">2,60 €</td>
+<td style="text-align: right;">2,3636 €</td>
+<td style="text-align: right;">0,66 €</td>
+<td style="text-align: right;">4%</td>
+<td style="text-align: right;">0,6875 €</td>
+<td style="text-align: right;">1,6761 €</td>
+<td style="text-align: right;">70,9%</td>
+</tr>
+<tr>
+<td>Latte</td>
+<td style="text-align: right;">2,90 €</td>
+<td style="text-align: right;">2,6364 €</td>
+<td style="text-align: right;">0,74 €</td>
+<td style="text-align: right;">4%</td>
+<td style="text-align: right;">0,7708 €</td>
+<td style="text-align: right;">1,8655 €</td>
+<td style="text-align: right;">70,8%</td>
+</tr>
+<tr>
+<td>Cold brew</td>
+<td style="text-align: right;">3,40 €</td>
+<td style="text-align: right;">3,0909 €</td>
+<td style="text-align: right;">0,95 €</td>
+<td style="text-align: right;">5%</td>
+<td style="text-align: right;">1,0000 €</td>
+<td style="text-align: right;">2,0909 €</td>
+<td style="text-align: right;">67,6%</td>
+</tr>
+<tr>
+<td>Croissant</td>
+<td style="text-align: right;">2,30 €</td>
+<td style="text-align: right;">2,0909 €</td>
+<td style="text-align: right;">0,82 €</td>
+<td style="text-align: right;">8%</td>
+<td style="text-align: right;">0,8913 €</td>
+<td style="text-align: right;">1,1996 €</td>
+<td style="text-align: right;">57,4%</td>
+</tr>
+<tr>
+<td>Tostada</td>
+<td style="text-align: right;">3,90 €</td>
+<td style="text-align: right;">3,5455 €</td>
+<td style="text-align: right;">1,18 €</td>
+<td style="text-align: right;">6%</td>
+<td style="text-align: right;">1,2553 €</td>
+<td style="text-align: right;">2,2901 €</td>
+<td style="text-align: right;">64,6%</td>
+</tr>
+<tr>
+<td>Bolsa 250 g</td>
+<td style="text-align: right;">10,50 €</td>
+<td style="text-align: right;">9,5455 €</td>
+<td style="text-align: right;">4,60 €</td>
+<td style="text-align: right;">2%</td>
+<td style="text-align: right;">4,6939 €</td>
+<td style="text-align: right;">4,8520 €</td>
+<td style="text-align: right;">50,8%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>COGS 2026: 132.608 €.</li>
+<li>Margen bruto: 251.810 € (65,5%).</li>
+<li>Coste ajustado ponderado por ítem: 0,9207 €.</li>
+<li>COGS por ticket: 1,24 €.</li>
+<li>Margen bruto por ticket: 2,36 €.</li>
+</ul>
+<p>El producto con mayor margen porcentual es el espresso (71,7%); el de mayor margen absoluto por unidad es la bolsa de café (4,85 €). El croissant tiene el margen más bajo (57,4%) pero genera tráfico y ticket. La bolsa de café es solo el 4% de las unidades, pero aporta el 14,3% de los ingresos de 2028.</p>
+<h3 id="error-comun_3">Error común</h3>
+<p>Aplicar la merma al precio en vez de al coste. Si un croissant cuesta 0,82 € y se merma el 8%, el coste de cada unidad vendida es 0,82 / 0,92 = 0,8913 €, no 0,82 × 1,08 = 0,8856 €. La diferencia parece pequeña, pero se acumula en 20.000 unidades.</p>
+<h3 id="ejercicios_3">Ejercicios</h3>
+<ol>
+<li>¿Cuál es el COGS de 2026 en porcentaje de ingresos?</li>
+<li>Si la inflación de costes sube 1 punto en 2027 (de 3,5% a 4,5%), ¿cuánto sube el COGS de 2027?</li>
+<li>Si la merma del croissant sube del 8% al 16%, ¿cuánto sube el coste de las unidades vendidas en 2026?</li>
+<li>Si 5 puntos de mix se mueven de la bolsa de café al espresso, ¿qué pasa con el margen bruto?</li>
+</ol>
+<h3 id="respuestas_3">Respuestas</h3>
+<ol>
+<li>132.608 / 384.419 = 34,5%.</li>
+<li>El índice pasa de 1,035 a 1,045; el COGS de 2027 sube un 0,966%: 150.591 × 0,00966 = 1.455 €.</li>
+<li>Coste ajustado pasa de 0,8913 a 0,82/0,84 = 0,9762 €; +0,0849 €/unidad × 20.164 unidades = +1.712 €.</li>
+<li>Por cada ítem, ingresos bajan 0,05 × (9,5455 − 1,5455) = 0,40 €; COGS bajan 0,05 × (4,6939 − 0,4375) = 0,2128 €; margen bruto baja 0,1872 €/ítem × 144.026 = −26.960 €. Mover mix hacia productos baratos puede reducir el margen aunque vendas lo mismo.</li>
+</ol>
+<hr />
+<h2 id="capitulo-5">Capítulo 5 — Costes fijos, apalancamiento y punto de equilibrio</h2>
+<h3 id="objetivo_4">Objetivo</h3>
+<p>Calcular cuántos tickets al día necesita Aurora para no perder dinero y entender por qué una caída pequeña de ventas puede golpear fuerte al beneficio.</p>
+<h3 id="conceptos-clave_4">Conceptos clave</h3>
+<ul>
+<li><strong>Coste fijo</strong>: no cambia con cada ticket (alquiler, personal, seguros).</li>
+<li><strong>Coste variable</strong>: cambia con cada ticket (COGS, marketing variable).</li>
+<li><strong>Contribución por ticket</strong>: ingreso del ticket menos sus costes variables.</li>
+<li><strong>Punto de equilibrio</strong>: tickets/día con los que el resultado es cero.</li>
+<li><strong>Apalancamiento operativo</strong>: proporción de costes fijos; amplifica el efecto de la demanda.</li>
+<li><strong>Margen de seguridad</strong>: distancia entre las ventas previstas y el equilibrio.</li>
+</ul>
+<h3 id="formula_2">Fórmula</h3>
+<pre><code>Contribución/ticket = ingreso/ticket − COGS/ticket − marketing variable/ticket
+Costes fijos de caja = personal + alquiler + suministros + servicios
+                       + marketing fijo + otros gastos
+BE EBITDA (tickets/día) = costes fijos de caja / contribución / días
+BE total (tickets/día) = (costes fijos de caja + amortización + intereses)
+                         / contribución / días
+Margen de seguridad = (tickets/día previstos − BE total) / tickets/día previstos
+</code></pre>
+<h3 id="ejemplo-con-aurora-base-2026_4">Ejemplo con Aurora (Base, 2026)</h3>
+<ul>
+<li>Ingreso por ticket: 3,602 €.</li>
+<li>COGS por ticket: 1,243 €.</li>
+<li>Marketing variable por ticket: 0,108 €.</li>
+<li>Contribución por ticket: 2,251 €.</li>
+<li>Costes fijos de caja: 110.460 + 22.800 + 17.400 + 9.360 + 5.400 + 13.200 = 178.620 €.</li>
+<li>BE EBITDA: 178.620 / 2,251 / 312 = 254,2 tickets/día.</li>
+<li>BE total (añade 16.625 de amortización y 4.843 de intereses): 285,0 tickets/día.</li>
+<li>Tickets previstos: 342,0.</li>
+<li>Margen de seguridad: (342,0 − 285,0) / 342,0 = 16,7%.</li>
+</ul>
+<p>Lectura: Aurora puede perder 57 tickets/día (16,7% de la demanda) antes de entrar en pérdidas contables. Si pierde 10% de demanda (34 tickets/día), el EBITDA cae de 61.658 € a 37.630 € (−39%), porque los costes fijos no bajan.</p>
+<h3 id="error-comun_4">Error común</h3>
+<p>Incluir el COGS en los costes fijos. El COGS es variable; si no vendes, no compras (o no deberías). Otro error: dividir los costes fijos entre los ingresos totales en vez de entre la contribución por ticket; el resultado sería un porcentaje sin sentido operativo.</p>
+<h3 id="ejercicios_4">Ejercicios</h3>
+<ol>
+<li>Si el alquiler sube un 10%, ¿cuánto sube el punto de equilibrio?</li>
+<li>Si el personal sube un 5%, ¿cuánto sube el punto de equilibrio?</li>
+<li>Si la demanda cae un 10%, ¿cuál es el nuevo margen de seguridad?</li>
+<li>¿Por qué el punto de equilibrio total es mayor que el de EBITDA?</li>
+</ol>
+<h3 id="respuestas_4">Respuestas</h3>
+<ol>
+<li>Costes fijos +2.280 €; BE EBITDA = 180.900 / 2,251 / 312 = 257,6 tickets/día (+3,4). BE total = (180.900 + 21.468) / 2,251 / 312 = 288,1 (+3,1).</li>
+<li>Costes fijos +5.523 €; BE EBITDA = 184.143 / 2,251 / 312 = 262,3 (+8,1). BE total = 292,8 (+7,8).</li>
+<li>Tickets/día = 307,8; BE total 285,0; margen de seguridad = (307,8 − 285,0) / 307,8 = 7,4%.</li>
+<li>Porque el punto de equilibrio total incluye la amortización (16.625 €) y los intereses (4.843 €), que no son costes de caja operativa pero sí reducen el beneficio.</li>
+</ol>
+<hr />
+<h2 id="capitulo-6">Capítulo 6 — Personal y productividad</h2>
+<h3 id="objetivo_5">Objetivo</h3>
+<p>Entender el coste más grande y menos flexible del negocio, y cómo un cambio de FTE o de salario afecta al resultado.</p>
+<h3 id="conceptos-clave_5">Conceptos clave</h3>
+<ul>
+<li><strong>FTE</strong>: equivalente a tiempo completo; 0,5 FTE es media jornada.</li>
+<li><strong>Salario bruto</strong>: lo que se paga al empleado antes de IRPF y cotización del trabajador.</li>
+<li><strong>Cotización empresarial</strong>: 31,5% adicional sobre el bruto.</li>
+<li><strong>Coste empresa</strong>: salario bruto × (1 + 31,5%).</li>
+<li><strong>Crecimiento salarial</strong>: 3,0% anual.</li>
+<li><strong>Factor de personal del escenario</strong>: 1,03 en Pesimista, 1,00 en Base, 0,98 en Optimista.</li>
+<li><strong>Productividad</strong>: ingresos por FTE; no mide horas ni calidad, solo una relación.</li>
+</ul>
+<h3 id="formula_3">Fórmula</h3>
+<pre><code>Coste empresa anual = Σ(FTE_rol × salario_rol) × (1+SS) × (1+crecimiento)^(año−1)
+Coste mensual = coste empresa anual / 12
+% ingresos = coste personal / ingresos netos
+Ingresos por FTE = ingresos netos / FTE
+</code></pre>
+<h3 id="ejemplo-con-aurora-base">Ejemplo con Aurora (Base)</h3>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th style="text-align: right;">Salario bruto</th>
+<th style="text-align: right;">FTE 2026</th>
+<th style="text-align: right;">FTE 2027</th>
+<th style="text-align: right;">FTE 2028</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gerente</td>
+<td style="text-align: right;">30.000 €</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: right;">1,0</td>
+</tr>
+<tr>
+<td>Barista</td>
+<td style="text-align: right;">23.000 €</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: right;">1,5</td>
+<td style="text-align: right;">1,5</td>
+</tr>
+<tr>
+<td>Ayudante de cocina</td>
+<td style="text-align: right;">21.000 €</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: right;">1,0</td>
+<td style="text-align: right;">1,0</td>
+</tr>
+<tr>
+<td>Fin de semana</td>
+<td style="text-align: right;">20.000 €</td>
+<td style="text-align: right;">0,5</td>
+<td style="text-align: right;">0,5</td>
+<td style="text-align: right;">0,5</td>
+</tr>
+<tr>
+<td><strong>Total FTE</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>3,5</strong></td>
+<td style="text-align: right;"><strong>4,0</strong></td>
+<td style="text-align: right;"><strong>4,0</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Masa salarial 2026: 30.000 + 23.000 + 21.000 + 10.000 = 84.000 €.</li>
+<li>Coste empresa 2026: 84.000 × 1,315 = 110.460 €.</li>
+<li>% ingresos: 110.460 / 384.419 = 28,7%.</li>
+<li>Ingresos por FTE: 384.419 / 3,5 = 109.834 €.</li>
+<li>Coste medio por FTE: 110.460 / 3,5 = 31.560 €.</li>
+<li>Ingresos por FTE en 2027: 432.330 / 4,0 = 108.082 €.</li>
+</ul>
+<p>2027: 4,0 FTE, coste 129.350 € (+17,1%), ingresos 432.330 € (+12,5%), personal 29,9% de ingresos. El escalón de 0,5 FTE del barista explica la mayor parte del aumento; el resto es el 3% de crecimiento salarial.</p>
+<h3 id="error-comun_5">Error común</h3>
+<p>Usar el salario neto en vez del bruto, u olvidar la cotización empresarial. Un barista de 23.000 € brutos no cuesta 23.000 €, cuesta 30.245 €. Otro error: añadir FTE sin ajustar el salario y la cotización; el modelo lo hace automáticamente, pero el plan de personal debe reflejar quién entra y cuándo.</p>
+<h3 id="ejercicios_5">Ejercicios</h3>
+<ol>
+<li>Si el barista pasa a 2,0 FTE en 2028, ¿cuál es el nuevo coste de personal y el nuevo porcentaje sobre ingresos?</li>
+<li>Si el crecimiento salarial fuera del 4% en 2027, ¿cuánto subiría el coste de personal?</li>
+<li>¿Qué significa que los ingresos por FTE sean 109.834 €? ¿Es mucho o poco?</li>
+</ol>
+<h3 id="respuestas_5">Respuestas</h3>
+<ol>
+<li>+0,5 FTE × 23.000 × 1,0609 × 1,315 = +16.043 €; personal 149.273 €; 149.273 / 460.864 = 32,4%.</li>
+<li>129.350 × (1,04/1,03) = 130.605 €; +1.255 €. El efecto es pequeño en un año, pero se acumula.</li>
+<li>Que cada equivalente a tiempo completo genera 109.834 € de ingresos netos. Es una referencia; para juzgarla hay que comparar con locales similares, horas de apertura y mix de producto. No es una medida de esfuerzo ni de calidad.</li>
+</ol>
+<hr />
+<h2 id="capitulo-7">Capítulo 7 — De EBITDA a caja</h2>
+<h3 id="objetivo_6">Objetivo</h3>
+<p>Reconciliar beneficio y caja, y entender por qué un negocio rentable puede quedarse sin liquidez.</p>
+<h3 id="conceptos-clave_6">Conceptos clave</h3>
+<ul>
+<li><strong>Amortización</strong>: gasto no cash; se suma de vuelta.</li>
+<li><strong>Capital circulante</strong>: inventario + cuentas por cobrar − proveedores. En Aurora es negativo (los proveedores financian).</li>
+<li><strong>Δ capital circulante</strong>: cambio del capital circulante; si aumenta, consume caja; si baja, libera caja.</li>
+<li><strong>Capex de mantenimiento</strong>: inversión recurrente para mantener el local; 1,5% de ingresos.</li>
+<li><strong>FCFF</strong>: caja para todos los financiadores, antes de intereses y principal.</li>
+<li><strong>FCFE</strong>: caja para el accionista, después de intereses, escudo fiscal y principal.</li>
+<li><strong>Escudo fiscal</strong>: ahorro de impuestos por los intereses.</li>
+</ul>
+<h3 id="formula_4">Fórmula</h3>
+<pre><code>FCFF = EBITDA − impuesto_teórico_sin_deuda − capex_mantenimiento − ΔWC
+FCFE = FCFF − intereses + escudo_fiscal − principal
+Caja final = caja inicial + FCFE
+</code></pre>
+<h3 id="ejemplo-con-aurora-base-2026_5">Ejemplo con Aurora (Base, 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th style="text-align: right;">Importe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EBITDA</td>
+<td style="text-align: right;">61.658 €</td>
+</tr>
+<tr>
+<td>Impuesto teórico sin deuda</td>
+<td style="text-align: right;">−11.258 €</td>
+</tr>
+<tr>
+<td>Capex de mantenimiento</td>
+<td style="text-align: right;">−5.766 €</td>
+</tr>
+<tr>
+<td>Δ capital circulante</td>
+<td style="text-align: right;">+6.944 €</td>
+</tr>
+<tr>
+<td><strong>FCFF</strong></td>
+<td style="text-align: right;"><strong>51.577 €</strong></td>
+</tr>
+<tr>
+<td>Intereses</td>
+<td style="text-align: right;">−4.843 €</td>
+</tr>
+<tr>
+<td>Escudo fiscal</td>
+<td style="text-align: right;">+1.211 €</td>
+</tr>
+<tr>
+<td>Principal de deuda</td>
+<td style="text-align: right;">−11.988 €</td>
+</tr>
+<tr>
+<td><strong>FCFE</strong></td>
+<td style="text-align: right;"><strong>35.956 €</strong></td>
+</tr>
+<tr>
+<td>Caja inicial</td>
+<td style="text-align: right;">21.500 €</td>
+</tr>
+<tr>
+<td><strong>Caja final</strong></td>
+<td style="text-align: right;"><strong>57.456 €</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Reconciliación por la vía del beneficio neto:</p>
+<pre><code>Beneficio neto 30.142
++ Amortización 16.625
+− Capex mantenimiento 5.766
++ Liberación de circulante 6.944
+− Principal 11.988
+= FCFE 35.957 (1 € de redondeo)
+</code></pre>
+<p>El ΔWC es positivo porque el capital circulante pasa de +6.500 € (stock inicial) a −444 € (proveedores financian más que el stock). Es una liberación de caja de 6.944 €, no un ingreso.</p>
+<h3 id="error-comun_6">Error común</h3>
+<p>Decir "tengo 30.142 € de beneficio, luego tengo 30.142 € de caja". No: hay amortización que no es caja, capex que sí lo es, circulante que se mueve y deuda que se devuelve. En 2026, la caja sube 35.956 €, más que el beneficio, porque la amortización y la liberación de circulante compensan el capex y el principal.</p>
+<h3 id="ejercicios_6">Ejercicios</h3>
+<ol>
+<li>Si el capex de mantenimiento fuera el 2% de ingresos en vez del 1,5%, ¿cuál sería la caja final?</li>
+<li>Si el ΔWC fuera cero, ¿cuál sería la caja final?</li>
+<li>Si el principal fuera 15.000 €, ¿cuál sería la caja final?</li>
+<li>¿Por qué se suma la amortización y se resta el capex?</li>
+</ol>
+<h3 id="respuestas_6">Respuestas</h3>
+<ol>
+<li>Capex 7.688 € en vez de 5.766 €; FCFE 34.034 €; caja final 55.534 €.</li>
+<li>FCFE 29.012 €; caja final 50.512 €.</li>
+<li>FCFE 32.944 €; caja final 54.444 €.</li>
+<li>La amortización es un gasto contable que ya ocurrió como capex en el pasado; no vuelve a salir caja. El capex es la salida de caja real del periodo. Se suma la primera para llegar al beneficio cash y se resta el segundo para reflejar la inversión.</li>
+</ol>
+<hr />
+<h2 id="capitulo-8">Capítulo 8 — Deuda, intereses y DSCR</h2>
+<h3 id="objetivo_7">Objetivo</h3>
+<p>Entender cómo funciona un préstamo francés, cuánto cuesta y cómo se mide la capacidad de pagarlo.</p>
+<h3 id="conceptos-clave_7">Conceptos clave</h3>
+<ul>
+<li><strong>Préstamo francés</strong>: cuota constante; al principio se paga más interés y menos principal.</li>
+<li><strong>Tipo fijo</strong>: 7,5% nominal anual; cuota mensual calculada con tipo mensual 0,625%.</li>
+<li><strong>Interés</strong>: saldo vivo × tipo mensual.</li>
+<li><strong>Principal</strong>: cuota − interés.</li>
+<li><strong>DSCR</strong>: (EBITDA − impuestos) / (intereses + principal).</li>
+<li><strong>Escudo fiscal</strong>: los intereses reducen la base imponible; el ahorro es tipo × interés (con matices de pérdidas).</li>
+</ul>
+<h3 id="formula_5">Fórmula</h3>
+<pre><code>Cuota = PMT(tipo/12, meses, −préstamo)
+Interés(t) = saldo_vivo(t−1) × tipo/12
+Principal(t) = cuota − interés(t)
+Saldo(t) = saldo(t−1) − principal(t)
+DSCR(t) = (EBITDA(t) − impuestos(t)) / (intereses(t) + principal(t))
+</code></pre>
+<h3 id="ejemplo-con-aurora">Ejemplo con Aurora</h3>
+<ul>
+<li>Préstamo: 70.000 €.</li>
+<li>Tipo: 7,5% nominal anual.</li>
+<li>Plazo: 60 meses.</li>
+<li>Cuota: 1.402,66 €/mes (16.831,88 €/año).</li>
+<li>Interés total del préstamo: 14.159 €.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Año</th>
+<th style="text-align: right;">Intereses</th>
+<th style="text-align: right;">Principal</th>
+<th style="text-align: right;">Saldo final</th>
+<th style="text-align: right;">DSCR Base</th>
+<th style="text-align: right;">DSCR Pesimista</th>
+<th style="text-align: right;">DSCR Optimista</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026</td>
+<td style="text-align: right;">4.843 €</td>
+<td style="text-align: right;">11.988 €</td>
+<td style="text-align: right;">58.012 €</td>
+<td style="text-align: right;">3,07</td>
+<td style="text-align: right;">1,69</td>
+<td style="text-align: right;">3,91</td>
+</tr>
+<tr>
+<td>2027</td>
+<td style="text-align: right;">3.913 €</td>
+<td style="text-align: right;">12.919 €</td>
+<td style="text-align: right;">45.092 €</td>
+<td style="text-align: right;">3,39</td>
+<td style="text-align: right;">1,35</td>
+<td style="text-align: right;">4,78</td>
+</tr>
+<tr>
+<td>2028</td>
+<td style="text-align: right;">2.910 €</td>
+<td style="text-align: right;">13.922 €</td>
+<td style="text-align: right;">31.170 €</td>
+<td style="text-align: right;">3,83</td>
+<td style="text-align: right;">1,17</td>
+<td style="text-align: right;">5,79</td>
+</tr>
+</tbody>
+</table>
+<p>Lectura: en Base, el EBITDA menos impuestos cubre 3,1 veces el servicio de la deuda en 2026; en Pesimista, 1,7 veces en 2026 y 1,17 en 2028. Si el banco exige un covenant de 1,2x, el Pesimista lo incumple en 2028. La deuda no es el problema principal en Base; el problema es la combinación de menos demanda y más costes.</p>
+<h3 id="error-comun_7">Error común</h3>
+<p>Dividir el EBITDA entre el saldo del préstamo. Eso mide apalancamiento, no capacidad de pago. El DSCR compara la caja operativa con <strong>lo que hay que pagar cada año</strong> (intereses + principal). Otro error: olvidar el principal; el interés es solo una parte de la cuota.</p>
+<h3 id="ejercicios_7">Ejercicios</h3>
+<ol>
+<li>Si el tipo sube al 8,5%, ¿cuál es la nueva cuota y el DSCR de 2026 en Base?</li>
+<li>Si el plazo se alarga a 7 años, ¿qué pasa con la cuota, los intereses totales y el DSCR?</li>
+<li>¿Qué harías si el DSCR del Pesimista baja de 1,2x?</li>
+</ol>
+<h3 id="respuestas_7">Respuestas</h3>
+<ol>
+<li>Cuota 1.436,16 €; intereses 2026 5.500 €; principal 11.734 €; DSCR = (61.658 − 10.047) / (5.500 + 11.734) = 2,99.</li>
+<li>Cuota 1.073,68 € (−329 €/mes); intereses totales 20.189 € (+6.030 €); el DSCR sube porque el principal anual baja, pero pagan más intereses en total. Es un trade-off de liquidez vs coste.</li>
+<li>Negociar una carencia de principal, ampliar el plazo, aportar equity o reducir capex/personal. El modelo permite probar el efecto antes de hablar con el banco; no se debe confiar en que el escenario Base se cumpla.</li>
+</ol>
+<hr />
+<h2 id="capitulo-9">Capítulo 9 — Escenarios y sensibilidad</h2>
+<h3 id="objetivo_8">Objetivo</h3>
+<p>Usar escenarios para tomar decisiones robustas, no para elegir el futuro que más gusta.</p>
+<h3 id="conceptos-clave_8">Conceptos clave</h3>
+<ul>
+<li><strong>Matriz de escenarios</strong>: 10 variables; todo lo demás es estructural y común.</li>
+<li><strong>Pesimista</strong>: demanda 12% por debajo del plan, crecimiento 1,5%, precios +1,5%, costes +4,5%, personal 1,03, alquiler 1,05, servicios +6%, marketing 2%, otros 1,08/+3%.</li>
+<li><strong>Base</strong>: demanda en plan, crecimiento 4%, precios +2,5%, costes +3,5%, personal 1,00, alquiler 1,00, servicios +4%, marketing 3%, otros 1,00/+2,5%.</li>
+<li><strong>Optimista</strong>: demanda +8%, crecimiento 6%, precios +3,2%, costes +2,8%, personal 0,98, alquiler 0,96, servicios +3%, marketing 4%, otros 0,95/+2%.</li>
+<li><strong>Sensibilidad</strong>: cambiar una variable y medir el efecto, manteniendo el resto.</li>
+</ul>
+<h3 id="formula_6">Fórmula</h3>
+<p>No hay una fórmula única: cada variable entra en su línea. La sensibilidad se calcula como:</p>
+<pre><code>ΔEBITDA = EBITDA(variable + Δ) − EBITDA(base)
+</code></pre>
+<h3 id="ejemplo-con-aurora-2028">Ejemplo con Aurora (2028)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align: right;">Pesimista</th>
+<th style="text-align: right;">Base</th>
+<th style="text-align: right;">Optimista</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingresos</td>
+<td style="text-align: right;">378.796 €</td>
+<td style="text-align: right;">460.864 €</td>
+<td style="text-align: right;">524.147 €</td>
+</tr>
+<tr>
+<td>EBITDA</td>
+<td style="text-align: right;">19.713 €</td>
+<td style="text-align: right;">79.505 €</td>
+<td style="text-align: right;">123.323 €</td>
+</tr>
+<tr>
+<td>Margen EBITDA</td>
+<td style="text-align: right;">5,2%</td>
+<td style="text-align: right;">17,3%</td>
+<td style="text-align: right;">23,5%</td>
+</tr>
+<tr>
+<td>Beneficio neto</td>
+<td style="text-align: right;">134 €</td>
+<td style="text-align: right;">44.978 €</td>
+<td style="text-align: right;">77.841 €</td>
+</tr>
+<tr>
+<td>Caja final</td>
+<td style="text-align: right;">32.499 €</td>
+<td style="text-align: right;">132.063 €</td>
+<td style="text-align: right;">200.325 €</td>
+</tr>
+<tr>
+<td>DSCR</td>
+<td style="text-align: right;">1,17</td>
+<td style="text-align: right;">3,83</td>
+<td style="text-align: right;">5,79</td>
+</tr>
+<tr>
+<td>Payback proyecto</td>
+<td style="text-align: right;">&gt;36 meses</td>
+<td style="text-align: right;">34 meses</td>
+<td style="text-align: right;">25 meses</td>
+</tr>
+</tbody>
+</table>
+<p>Sensibilidad del EBITDA de 2026 en Base:</p>
+<table>
+<thead>
+<tr>
+<th>Cambio</th>
+<th style="text-align: right;">Δ EBITDA</th>
+<th>Lectura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Demanda −10%</td>
+<td style="text-align: right;">−24.028 €</td>
+<td>El más peligroso: los costes fijos no bajan</td>
+</tr>
+<tr>
+<td>Demanda +10%</td>
+<td style="text-align: right;">+24.028 €</td>
+<td>El mismo efecto, al revés</td>
+</tr>
+<tr>
+<td>Precio +5% (sin perder demanda)</td>
+<td style="text-align: right;">+18.644 €</td>
+<td>Muy potente, pero la elasticidad no se modela</td>
+</tr>
+<tr>
+<td>Personal +5%</td>
+<td style="text-align: right;">−5.523 €</td>
+<td>El coste más grande y rígido</td>
+</tr>
+<tr>
+<td>Alquiler +10%</td>
+<td style="text-align: right;">−2.280 €</td>
+<td>Importante, pero menor que personal</td>
+</tr>
+<tr>
+<td>Marketing +1 pp</td>
+<td style="text-align: right;">−3.844 €</td>
+<td>Se come parte del margen; debe generar demanda</td>
+</tr>
+<tr>
+<td>Inflación de costes +1 pp</td>
+<td style="text-align: right;">0 € en 2026; −1.455 € en 2027; −3.145 € en 2028</td>
+<td>El índice parte de 1,00 en 2026</td>
+</tr>
+</tbody>
+</table>
+<p>La conclusión práctica: <strong>la demanda y el precio mueven el resultado mucho más que el alquiler o el marketing</strong>. Pero la demanda es lo que menos controlas; por eso el Pesimista es el escenario que decide si la inversión es resistente.</p>
+<h3 id="error-comun_8">Error común</h3>
+<p>Cambiar demanda y precio a la vez sin una historia que lo justifique. Si bajas la demanda y subes el precio, estás mezclando recesión con una subida de precios que probablemente no podrías aplicar. Otro error: usar el Optimista como presupuesto; el presupuesto debe ser el Base, y el Optimista una opción de crecimiento.</p>
+<h3 id="ejercicios_8">Ejercicios</h3>
+<ol>
+<li>¿Qué variable tiene más impacto por cada 1% de cambio: demanda, precio, personal o alquiler?</li>
+<li>Si la demanda cae 10% y el precio sube 5%, ¿cuál es el EBITDA aproximado?</li>
+<li>Si en 2027 el precio sube 1 punto y la inflación de costes sube 1 punto, ¿qué pasa con el EBITDA?</li>
+<li>¿Por qué el Pesimista tiene un margen EBITDA del 5,2% y no es negativo?</li>
+</ol>
+<h3 id="respuestas_8">Respuestas</h3>
+<ol>
+<li>Demanda: 10% → 39% de EBITDA. Precio: 5% → 30%. Personal: 5% → 9%. Alquiler: 10% → 3,7%. La demanda es la más potente, seguida del precio.</li>
+<li>61.658 − 24.028 + 18.644 = 56.274 € (aproximado; hay interacciones pequeñas).</li>
+<li>Precio +1%: ingresos +4.323 €; marketing variable +130 €; EBITDA +4.193 €. Coste +1 pp: COGS +1.455 €. Efecto neto: +2.738 €.</li>
+<li>Porque la demanda, aunque baja, sigue siendo positiva y el local cubre costes variables y parte de los fijos; el EBITDA es 19.713 €. Lo que casi desaparece es el beneficio neto (134 €), porque la amortización y los intereses se comen el margen.</li>
+</ol>
+<hr />
+<h2 id="capitulo-10">Capítulo 10 — Decidir con el modelo</h2>
+<h3 id="objetivo_9">Objetivo</h3>
+<p>Convertir los números en una decisión: invertir, negociar o esperar.</p>
+<h3 id="conceptos-clave_9">Conceptos clave</h3>
+<ul>
+<li><strong>Payback</strong>: meses para recuperar la inversión con la caja acumulada.</li>
+<li><strong>Payback proyecto</strong>: usa FCFF y la inversión total (capex + circulante inicial = 138.500 €).</li>
+<li><strong>Payback equity</strong>: usa FCFE y el equity aportado (90.000 €).</li>
+<li><strong>Cash-on-cash</strong>: FCFE acumulado / equity.</li>
+<li><strong>DSCR</strong>: capacidad de pagar la deuda.</li>
+<li><strong>Margen de seguridad</strong>: colchón ante una caída de demanda.</li>
+<li><strong>Coste de oportunidad</strong>: lo que podrías hacer con el dinero y el tiempo.</li>
+</ul>
+<h3 id="formula_7">Fórmula</h3>
+<pre><code>Payback = primer mes en que la caja acumulada ≥ inversión
+Cash-on-cash = FCFE acumulado / equity
+Margen de seguridad = (tickets previstos − BE total) / tickets previstos
+</code></pre>
+<h3 id="ejemplo-con-aurora_1">Ejemplo con Aurora</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align: right;">Pesimista</th>
+<th style="text-align: right;">Base</th>
+<th style="text-align: right;">Optimista</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Payback proyecto</td>
+<td style="text-align: right;">&gt;36 meses</td>
+<td style="text-align: right;">34 meses</td>
+<td style="text-align: right;">25 meses</td>
+</tr>
+<tr>
+<td>Payback equity</td>
+<td style="text-align: right;">&gt;36 meses</td>
+<td style="text-align: right;">30 meses</td>
+<td style="text-align: right;">22 meses</td>
+</tr>
+<tr>
+<td>FCFE acumulado 3 años</td>
+<td style="text-align: right;">10.999 €</td>
+<td style="text-align: right;">110.563 €</td>
+<td style="text-align: right;">178.825 €</td>
+</tr>
+<tr>
+<td>Cash-on-cash 3 años</td>
+<td style="text-align: right;">12,2%</td>
+<td style="text-align: right;">122,8%</td>
+<td style="text-align: right;">198,7%</td>
+</tr>
+<tr>
+<td>Caja final 2028</td>
+<td style="text-align: right;">32.499 €</td>
+<td style="text-align: right;">132.063 €</td>
+<td style="text-align: right;">200.325 €</td>
+</tr>
+<tr>
+<td>DSCR 2028</td>
+<td style="text-align: right;">1,17</td>
+<td style="text-align: right;">3,83</td>
+<td style="text-align: right;">5,79</td>
+</tr>
+</tbody>
+</table>
+<p>Lectura: en Base, el accionista recupera los 90.000 € en 30 meses y acumula 110.563 € de FCFE en tres años, un 122,8% del equity aportado. En Pesimista, no recupera la inversión en 36 meses y el DSCR roza el covenant. En Optimista, recupera en 22 meses y acumula 178.825 € de FCFE, un 198,7% del equity.</p>
+<h3 id="criterios-de-decision">Criterios de decisión</h3>
+<ol>
+<li><strong>¿Aguantas el Pesimista?</strong> Si la respuesta es no, no inviertas o negocia mejor alquiler/capex.</li>
+<li><strong>¿El DSCR en Base es ≥1,5x con colchón?</strong> En Aurora es 3,07; hay margen.</li>
+<li><strong>¿El alquiler es ≤6% de ingresos?</strong> En Base 2026 es 5,9%; justo en el límite.</li>
+<li><strong>¿El personal es ≤30% de ingresos?</strong> En Base 2026 es 28,7%; en 2027 sube a 29,9%.</li>
+<li><strong>¿El margen de seguridad es ≥15%?</strong> En Base 2026 es 16,7%; en Pesimista 2028 es 0%.</li>
+<li><strong>¿La localización pasa una prueba de demanda de dos semanas?</strong> El modelo no lo puede responder; hay que contar clientes.</li>
+<li><strong>¿Puedes perder el equity sin cambiar tu vida?</strong> Es una decisión personal, no financiera.</li>
+</ol>
+<h3 id="error-comun_9">Error común</h3>
+<p>Usar un solo número (payback, ROI o EBITDA) como respuesta. La decisión es un conjunto de condiciones; el modelo ayuda a verlas, no a sustituirlas. Otro error: comparar el payback del proyecto (34 meses) con el del equity (30 meses) y elegir el que parece mejor; miden cosas distintas.</p>
+<h3 id="ejercicios_9">Ejercicios</h3>
+<ol>
+<li>¿Por qué el payback del equity es menor que el del proyecto si el equity es menor que la inversión total?</li>
+<li>¿Qué tres condiciones pondrías para invertir en Aurora?</li>
+<li>¿Qué tendría que pasar para que decidieras no invertir?</li>
+</ol>
+<h3 id="respuestas_9">Respuestas</h3>
+<ol>
+<li>Porque el equity (90.000 €) es menor que la inversión total (138.500 €) y el FCFE incluye el efecto de la deuda. El payback del equity mide cuándo recuperas tu aportación; el del proyecto, cuándo se recupera toda la inversión.</li>
+<li>Ejemplo: (a) el Pesimista no quiebra y cubre la deuda; (b) el alquiler no supera el 6% de ingresos; (c) la prueba de demanda de dos semanas confirma al menos 250 tickets/día en hora punta; (d) tienes 12 meses de colchón de caja; (e) el capex tiene un 10% de contingencia.</li>
+<li>Ejemplo: que el Pesimista tenga DSCR &lt;1,0, que el alquiler supere el 8% de ingresos, que la demanda real sea &lt;250 tickets/día, que el capex se desvíe &gt;15% o que el banco no financie más del 40%.</li>
+</ol>
+<hr />
+<h2 id="calculadoras-de-bolsillo">Calculadoras de bolsillo</h2>
+<p>La página publicada incluye tres calculadoras que usan el modelo compartido: una para pasar de tickets/día a ingresos, otra para el punto de equilibrio y otra para reconciliar EBITDA y caja. Sirven para comprobar las fórmulas de los capítulos 3, 5 y 7 con tus propios números.</p>
+<h2 id="glosario">Glosario mínimo</h2>
+<p>Estos son los 12 términos que más se usan en la guía. El glosario completo está en <code>GLOSSARY.md</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición breve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ticket</td>
+<td>Una compra completa de un cliente en una visita.</td>
+</tr>
+<tr>
+<td>Ítems por ticket</td>
+<td>Productos vendidos por ticket; en Aurora, 1,35.</td>
+</tr>
+<tr>
+<td>PVP</td>
+<td>Precio con IVA; el modelo usa el neto.</td>
+</tr>
+<tr>
+<td>COGS</td>
+<td>Coste de los productos vendidos, incluida la merma.</td>
+</tr>
+<tr>
+<td>Margen bruto</td>
+<td>Ingresos − COGS.</td>
+</tr>
+<tr>
+<td>EBITDA</td>
+<td>Beneficio antes de intereses, impuestos, amortización y depreciación.</td>
+</tr>
+<tr>
+<td>EBIT</td>
+<td>EBITDA − amortización.</td>
+</tr>
+<tr>
+<td>Capital circulante</td>
+<td>Inventario + cobros − proveedores.</td>
+</tr>
+<tr>
+<td>FCFF</td>
+<td>Caja para todos los financiadores, antes de deuda.</td>
+</tr>
+<tr>
+<td>FCFE</td>
+<td>Caja para el accionista, después de deuda.</td>
+</tr>
+<tr>
+<td>DSCR</td>
+<td>Cobertura del servicio de la deuda.</td>
+</tr>
+<tr>
+<td>Payback</td>
+<td>Meses para recuperar la inversión.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="checklist">Checklist de validación</h2>
+<p>Antes de confiar en una cifra del modelo, comprueba:</p>
+<ul>
+<li>[ ] El mix de producto suma 100%.</li>
+<li>[ ] La estacionalidad suma 12,00.</li>
+<li>[ ] Los días operativos suman 312.</li>
+<li>[ ] Los ingresos usan precio neto, no PVP con IVA.</li>
+<li>[ ] El COGS usa coste ajustado por merma, no coste bruto.</li>
+<li>[ ] El personal incluye cotización empresarial y FTE.</li>
+<li>[ ] El EBITDA no incluye amortización, intereses ni capex.</li>
+<li>[ ] El EBIT resta la amortización.</li>
+<li>[ ] El EBT resta los intereses.</li>
+<li>[ ] El impuesto se calcula sobre base positiva y compensa pérdidas.</li>
+<li>[ ] El capital circulante usa días de inventario y proveedor.</li>
+<li>[ ] El FCFF resta capex de mantenimiento y ΔWC.</li>
+<li>[ ] El FCFE resta intereses y principal, y suma el escudo fiscal.</li>
+<li>[ ] La caja final = caja inicial + FCFE.</li>
+<li>[ ] El préstamo cierra a cero en el mes 60.</li>
+<li>[ ] El payback usa la inversión correcta (proyecto vs equity).</li>
+<li>[ ] Los escenarios están ordenados: demanda/precio Pesimista &lt; Base &lt; Optimista; costes al revés.</li>
+<li>[ ] Los gráficos apuntan a celdas vivas, no a imágenes.</li>
+<li>[ ] Ninguna celda calculada tiene un número pegado.</li>
+<li>[ ] El sitio y el libro dan las mismas cifras.</li>
+</ul>
+<h2 id="taller">Notas para un taller de 90 minutos</h2>
+<ol>
+<li><strong>Minutos 0–10</strong>: presenta Aurora y el problema: 132.000 € de capex, 70.000 € de deuda, 90.000 € de equity. Pregunta: ¿es una buena inversión?</li>
+<li><strong>Minutos 10–30</strong>: capítulo 2. Reparte la cuenta de resultados de 2026 y pide que marquen qué líneas son caja y cuáles no.</li>
+<li><strong>Minutos 30–50</strong>: capítulo 5. Calcula el punto de equilibrio en la pizarra y compara con 342 tickets/día. Pide un margen de seguridad.</li>
+<li><strong>Minutos 50–70</strong>: capítulo 9. Mueve el laboratorio: demanda −10%, precio +5%, personal +5%. ¿Qué decisión cambia?</li>
+<li><strong>Minutos 70–85</strong>: capítulo 10. Debate: ¿invertirías? ¿Qué condición te haría decir no?</li>
+<li><strong>Minutos 85–90</strong>: cierra con el checklist y la idea clave: el modelo no decide, ordena las decisiones.</li>
+</ol>
+<h2 id="respuestas-consolidadas">Respuestas consolidadas</h2>
+<p>Las respuestas están al final de cada capítulo. Si vas a usar la guía en un taller, no las imprimas en la primera hoja: deja que el alumno intente primero y compruebe después.</p>
+<h2 id="aviso">Aviso</h2>
+<p>Esta guía es material educativo. No es asesoramiento financiero, fiscal ni de inversión. Los supuestos son ilustrativos y deben sustituirse por ofertas, contratos y datos reales antes de tomar una decisión.</p>
+        </article>
+      </div>
     </main>
+
     <footer class="site-footer">
-      <div class="wrap footer-bottom" style="margin-top: 0; border-top: 0; padding-top: 0">
-        <span>Cafetería Aurora · modelo educativo · 2026–2028</span>
-        <a href="./index.html">Volver al dashboard</a>
+      <div class="wrap">
+        <div class="footer-bottom" style="margin-top: 0; border-top: 0; padding-top: 0">
+          <span>Cafetería Aurora · guía educativa · 2026–2028</span>
+          <span>No es asesoramiento financiero, fiscal ni legal.</span>
+        </div>
       </div>
     </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./js/guide.js"></script>
   </body>
 </html>

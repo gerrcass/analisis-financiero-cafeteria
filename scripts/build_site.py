@@ -7,6 +7,7 @@ libro. Copia únicamente la fuente del sitio y genera los artefactos derivados.
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -17,9 +18,13 @@ if str(ROOT) not in sys.path:
 
 from scripts.model import load_model  # noqa: E402
 
+import markdown  # noqa: E402
+
 SITE = ROOT / "site"
 DOCS = ROOT / "docs"
 MODEL = ROOT / "data" / "model.json"
+GUIDE_MD = ROOT / "docs" / "guia-finanzas.md"
+GUIDE_TEMPLATE = SITE / "aprende.template.html"
 BASE_URL = "https://gerrcass.github.io/analisis-financiero-cafeteria/"
 
 
@@ -38,6 +43,9 @@ def build_site(source: Path = SITE, output: Path = DOCS, model: Path = MODEL) ->
         shutil.copy2(mark, source / "assets" / "aurora-mark.svg")
         shutil.copy2(mark, output / "assets" / "aurora-mark.svg")
 
+    build_guide(output / "aprende.html")
+    # La plantilla no es una página: no debe publicarse con el sitio.
+    (output / "aprende.template.html").unlink(missing_ok=True)
     (output / ".nojekyll").write_text("", encoding="utf-8")
     (output / "robots.txt").write_text(
         "User-agent: *\nAllow: /\nSitemap: " + BASE_URL + "sitemap.xml\n",
@@ -52,6 +60,24 @@ def build_site(source: Path = SITE, output: Path = DOCS, model: Path = MODEL) ->
         encoding="utf-8",
     )
     return output
+
+
+def build_guide(target: Path) -> Path:
+    """Publica la guía Markdown canónica en HTML, sin duplicar el texto a mano."""
+    text = GUIDE_MD.read_text(encoding="utf-8")
+    # El H1 vive en la plantilla; el documento aporta el cuerpo didáctico.
+    text = re.sub(r"\A# .*\n+", "", text)
+    md = markdown.Markdown(
+        extensions=["tables", "fenced_code", "toc", "attr_list", "sane_lists"],
+        extension_configs={"toc": {"toc_depth": "2-2", "permalink": False}},
+    )
+    content = md.convert(text)
+    toc_match = re.search(r"<ul>.*</ul>", md.toc, re.S)
+    toc = toc_match.group(0) if toc_match else "<ul></ul>"
+    template = GUIDE_TEMPLATE.read_text(encoding="utf-8")
+    html = template.replace("{{TOC}}", toc).replace("{{CONTENT}}", content)
+    target.write_text(html, encoding="utf-8")
+    return target
 
 
 def main(argv: list[str] | None = None) -> int:

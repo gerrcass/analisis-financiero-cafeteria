@@ -1,4 +1,5 @@
 import { buildModel, SCENARIO_KEYS, SCENARIO_META, URL_SCENARIO_ALIASES } from './model.js';
+import { createLab } from './lab.js';
 import {
   bulletChart,
   comboChart,
@@ -16,7 +17,8 @@ const state = {
   year: 2028,
   inputs: null,
   models: {},
-  view: 'annual'
+  view: 'annual',
+  lab: null
 };
 
 const eur0 = new Intl.NumberFormat('es-ES', {
@@ -608,8 +610,9 @@ function toast(message) {
 function setScenario(key) {
   if (key === state.scenario) return;
   state.scenario = key;
+  state.lab?.syncScenario(key);
   renderAll();
-  toast(`${SCENARIO_META[key].name}: ${SCENARIO_META[key].summary}`);
+  toast(`${SCENARIO_META[key].name}: ${SCENARIO_META[key].summary} El laboratorio se ha reiniciado.`);
 }
 
 function setYear(year) {
@@ -677,6 +680,7 @@ function bindEvents() {
 
   window.addEventListener('popstate', () => {
     parseState();
+    state.lab?.syncScenario(state.scenario);
     renderAll();
   });
 }
@@ -689,6 +693,7 @@ async function init() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state.inputs = await response.json();
     state.models = Object.fromEntries(SCENARIO_KEYS.map((key) => [key, buildModel(state.inputs, key)]));
+    state.lab = createLab({ inputs: state.inputs, scenarioKey: state.scenario, toast });
     renderAll();
   } catch (error) {
     const box = document.getElementById('app-error');
