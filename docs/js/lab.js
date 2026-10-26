@@ -113,8 +113,12 @@ export function createLab({ inputs, scenarioKey, toast }) {
   function updateHash() {
     const url = new URL(window.location.href);
     const encoded = encodeHash();
-    if (encoded) url.hash = encoded;
-    else url.hash = '';
+    if (encoded) {
+      url.hash = encoded;
+    } else if (url.hash.startsWith('#lab=')) {
+      // No borrar un ancla normal (#laboratorio, #capitulo-5).
+      url.hash = '';
+    }
     window.history.replaceState({}, '', url);
   }
 

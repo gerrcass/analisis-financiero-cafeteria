@@ -234,6 +234,12 @@ test.describe('Cafetería Aurora — laboratorio y guía', () => {
     await expect(page).not.toHaveURL(/#lab=/);
   });
 
+  test('el ancla del laboratorio no se pierde al cargar', async ({ page }) => {
+    await page.goto('/#laboratorio', { waitUntil: 'networkidle' });
+    await expect(page).toHaveURL(/#laboratorio$/);
+    await expect(page.locator('#laboratorio')).toBeVisible();
+  });
+
   test('un enlace con overrides restaura el laboratorio', async ({ page }) => {
     await page.goto('/?escenario=base&anio=2028#lab=d:1.1', { waitUntil: 'networkidle' });
     await expect(page.locator('#lab-status')).toContainText('Personalizado');
