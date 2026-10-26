@@ -14,7 +14,7 @@ help:
 	@echo "  make site       construye el sitio en docs/"
 	@echo "  make screenshot captura el dashboard en docs/assets/screenshot-dashboard.png"
 	@echo "  make test       modelo + libro + sitio + tests Python, Node y navegador"
-	@echo "  make check      test + comprobación de que docs/ está actualizado"
+	@echo "  make check      test + verificación semántica de artefactos"
 	@echo "  make all        model + workbook + site + test"
 	@echo "  make serve      sirve docs/ en http://localhost:$(PORT)"
 
@@ -57,11 +57,11 @@ test-js: node_modules
 test-e2e: node_modules site
 	$(NPM) run test:e2e
 
-check: test verify
+check: verify test
 
-verify:
-	git diff --exit-code -- data/expected.json site/data/model.json docs/ assets/
-	@echo "Artefactos generados y commiteados: OK"
+verify: .venv
+	$(PYTHON) scripts/verify_artifacts.py
+	$(PYTHON) scripts/check_links.py
 
 all: model workbook site
 	$(MAKE) test-python

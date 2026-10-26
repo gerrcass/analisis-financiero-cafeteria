@@ -461,7 +461,8 @@ export function buildModel(inputs, scenarioKey = 'base', overrides = {}, modifie
     const revenue = slice.reduce((sum, month) => sum + month.revenue, 0);
     const cogs = slice.reduce((sum, month) => sum + month.cogs, 0);
     const grossProfit = revenue - cogs;
-    const personnel = slice.reduce((sum, month) => sum + month.personnel, 0);
+    // El coste anual se deriva del coste empresa exacto, no de sumar 12 floats.
+    const personnel = staffByYear[yearIndex] * scenario.personnelFactor;
     const opex = slice.reduce((sum, month) => sum + month.totalOpex - month.personnel, 0);
     const ebitda = grossProfit - personnel - opex;
     const depreciation = slice.reduce((sum, month) => sum + month.depreciation, 0);
