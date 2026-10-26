@@ -339,6 +339,21 @@ def test_aprende_sheet_has_chapters_examples_and_questions(wb):
     assert any("Base!B76" in str(formula) for formula in formulas)
 
 
+def test_aprende_revenue_per_fte_uses_fte_not_operating_days(wb, recalc):
+    """Regresión: el ejemplo de 2027 debe dividir ingresos entre 4,0 FTE, no entre días."""
+    formula = str(wb["Aprende"]["B53"].value)
+    assert "Personal!D9" in formula
+    assert "Base!C9" not in formula
+    rendered = recalc["cells"]["APRENDE"]["B53"]
+    assert isinstance(rendered, str)
+    amounts = re.findall(r"([\d.,]+)\s*€", rendered)
+    assert amounts, rendered
+    value = int(amounts[-1].replace(".", "").replace(",", ""))
+    expected = EXPECTED["scenarios"]["base"]["annual"]["2027"]["revenue"] / 4.0
+    assert value == pytest.approx(expected, rel=1e-3)
+    assert 90_000 < value < 130_000, f"ingresos por FTE poco creíbles: {value}"
+
+
 def test_recalc_summary_values(recalc):
     summary = recalc["values"]["summary"]
     assert summary["selector"] == 2

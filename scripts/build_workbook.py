@@ -1498,7 +1498,7 @@ class WorkbookBuilder:
             (
                 "6. Personal y productividad",
                 "El coste empresa incluye salario bruto, FTE y 31,5 % de cotización. El escalón de 2027 (barista 1,5 FTE) explica por qué el margen no mejora ese año.",
-                '="Personal 2027: "&TEXT(Base!C79,"#,##0 €")&" · ingresos por FTE: "&TEXT(Base!C76/Base!C9,"#,##0 €")',
+                '="Personal 2027: "&TEXT(Base!C79,"#,##0 €")&" · ingresos por FTE: "&TEXT(Base!C76/Personal!D9,"#,##0 €")',
                 "¿Cuánto cuesta el personal en 2027?",
                 '="Personal 2027: "&TEXT(Base!C79,"#,##0 €")',
             ),
