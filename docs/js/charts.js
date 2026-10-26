@@ -246,6 +246,7 @@ function horizontalBarChart({
   description,
   items,
   valueLabel = 'Margen unitario',
+  valueFormatter = kEur,
   height = 320
 }) {
   const width = 720;
@@ -261,8 +262,8 @@ function horizontalBarChart({
     const barWidth = (item.value / max) * innerW;
     content += `<text x="${margin.left - 12}" y="${y + 4}" text-anchor="end" font-size="11" fill="${COLORS.espresso}">${esc(item.label)}</text>`;
     content += `<rect x="${margin.left}" y="${y - barHeight / 2}" width="${innerW}" height="${barHeight}" rx="4" fill="${COLORS.cream}"></rect>`;
-    content += `<rect x="${margin.left}" y="${y - barHeight / 2}" width="${Math.max(2, barWidth)}" height="${barHeight}" rx="4" fill="${item.color || COLORS.terracotta}"><title>${esc(item.label)} · ${esc(valueLabel)}: ${kEur(item.value)}</title></rect>`;
-    content += `<text x="${margin.left + barWidth + 8}" y="${y + 4}" font-size="10" fill="${COLORS.muted}">${kEur(item.value)}</text>`;
+    content += `<rect x="${margin.left}" y="${y - barHeight / 2}" width="${Math.max(2, barWidth)}" height="${barHeight}" rx="4" fill="${item.color || COLORS.terracotta}"><title>${esc(item.label)} · ${esc(valueLabel)}: ${valueFormatter(item.value)}</title></rect>`;
+    content += `<text x="${margin.left + barWidth + 8}" y="${y + 4}" font-size="10" fill="${COLORS.muted}">${valueFormatter(item.value)}</text>`;
   });
   return `${svgOpen(id, title, description, width, height)}${content}</svg>`;
 }
