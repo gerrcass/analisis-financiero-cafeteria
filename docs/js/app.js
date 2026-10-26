@@ -7,9 +7,7 @@ import {
   groupedBarChart,
   horizontalBarChart,
   lineChart,
-  COLORS,
-  kEur,
-  pct
+  COLORS
 } from './charts.js';
 
 const state = {

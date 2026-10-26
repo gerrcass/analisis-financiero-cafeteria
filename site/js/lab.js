@@ -68,7 +68,7 @@ export function createLab({ inputs, scenarioKey, toast }) {
     if (!container) return;
     container.innerHTML = LAB_CONTROLS.map((control) => {
       const id = `lab-${control.key}`;
-      const step = control.percent ? control.step : control.step;
+      const step = control.step;
       return `<div class="lab-control" data-lab-control="${control.key}">
         <div class="lab-control-head">
           <label for="${id}">${esc(control.label)}</label>

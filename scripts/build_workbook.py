@@ -11,10 +11,9 @@ hojas de escenario y el resumen se construyen con fórmulas.
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
-from typing import Any, Callable, Iterable
+from typing import Any, Callable
 
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, DoughnutChart, LineChart, Reference
